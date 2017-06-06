@@ -1,48 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-/** Поле ввода */
 export default class Input extends React.Component {
-    /** Конструктор */
     constructor(props) {
         super(props);
 
-        // Данные по умолчанию
-        // ToDo: заменить на Object.assign
         this.state = {
-            placeholder: props.placeholder || '',
-            value: props.value || '',
-            clear: props.clear || false,
+            value: props.value,
+            placeholder: props.placeholder,
+            clearAfterSubmit: props.clearAfterSubmit || false,
         };
 
-        // Байндим методы на this, чтобы не было проблем с контекстом
-        this.submitItem = this.submitItem.bind(this);
-        this.inputItem = this.inputItem.bind(this);
+        this.submitValue = this.submitValue.bind(this);
+        this.inputValue = this.inputValue.bind(this);
     }
 
-    /** Отправляет введённое значение */
-    submitItem(event) {
+    submitValue(event) {
         event.preventDefault();
-        // Отправляем значение в коллбек от компонента-родителя
-        this.props.onSubmit(this.state.value);
-        // Удаляем введённое значение после отправки, если передан соотв. флаг
-        this.state.clear && this.setState({ value: '' })
+        this.props.onSubmit && this.props.onSubmit(this.state.value);
+        this.state.clearAfterSubmit && this.setState({ value: '' })
     }
 
-    /** Записывает введённое значение в стейт */
-    inputItem(event) {
-        // ToDo: добавить проверки на ввод запрещёнки
+    inputValue(event) {
         this.setState({
             value: event.target.value
         });
     }
 
-    /** Рендер */
     render() {
         return (
-            <form onSubmit={this.submitItem}>
-                <input type="text" placeholder={this.state.placeholder} value={this.state.value} onChange={this.inputItem} />
+            <form onSubmit={this.submitValue}>
+                <input type="text" placeholder={this.state.placeholder} value={this.state.value} onChange={this.inputValue} />
             </form>
         );
     }
+}
+
+Input.propTypes = {
+    value: PropTypes.string,
+    placeholder: PropTypes.string,
+    clearAfterSubmit: PropTypes.bool,
+    onSubmit: PropTypes.func
+};
+
+Input.defaultProps = {
+    value: '',
+    placeholder: '',
+    clearAfterSubmit: true
 }
