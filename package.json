@@ -4,7 +4,7 @@
   "description": "Test React App",
   "main": "index.html",
   "scripts": {
-    "test": "There's no bathroom"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
