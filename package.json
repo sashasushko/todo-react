@@ -1,4 +1,21 @@
 {
+  "name": "todoapp",
+  "version": "0.0.1",
+  "description": "Test React App",
+  "main": "index.html",
+  "scripts": {
+    "test": "There's no bathroom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.skbkontur.ru:sushko/todo.git"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "Alexander Sushko",
+  "license": "ISC",
+  "dependencies": {},
   "devDependencies": {
     "webpack": "^2.6.1"
   }
