@@ -7,9 +7,12 @@ import Input from './input.js';
 export default class ListItem extends React.Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            isEditable: false
+        }
         this.compliteItem = this.compliteItem.bind(this);
         this.editItem = this.editItem.bind(this);
+        this.saveItem = this.saveItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
     }
 
@@ -20,7 +23,21 @@ export default class ListItem extends React.Component {
         });
     }
 
-    editItem(value) {
+    editItem(event) {
+        this.setState({
+            isEditable: true
+        })
+    }
+
+    saveItem(event) {
+        const value = event.target.value;
+        this.setState({
+            isEditable: false
+        })
+        if (!value) {
+            this.removeItem();
+            return;
+        }
         this.props.onChange({
             action: 'edit',
             index: this.props.index,
@@ -39,11 +56,13 @@ export default class ListItem extends React.Component {
         const value = this.props.value;
         const isComplited = this.props.isComplited;
         return (
-            <div>
-                <input type="checkbox" checked={isComplited} onChange={this.compliteItem} />
-                {value}
-                <button type="button" onClick={this.removeItem}>Удалить</button>
-                <Input value={value} clearAfterSubmit={false} onSubmit={this.editItem} />
+            <div className={this.state.isEditable ? 'editable' : 'noEditable'}>
+                <div className="view">
+                    <input type="checkbox" checked={isComplited} onChange={this.compliteItem} />
+                    <span onClick={this.editItem}>{value}</span>
+                    <button type="button" onClick={this.removeItem}>Удалить</button>
+                </div>
+                <input className="edit" type="text" defaultValue={value} onBlur={this.saveItem} />
             </div>
         )
     }

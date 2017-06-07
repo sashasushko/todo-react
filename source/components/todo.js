@@ -7,11 +7,9 @@ import List from './list.js';
 export default class ToDo extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             items: {}
         };
-
         this.addItem = this.addItem.bind(this);
         this.changeValue = this.changeValue.bind(this);
         this.changeComplite = this.changeComplite.bind(this);
