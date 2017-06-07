@@ -2,22 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import ListItem from './listItem.js';
+import Item from './item.js';
 
 export default function List(props) {
-    const listItems = Object.keys(props.items).map((index) => {
-        const key = Number(index);
-        const value = props.items[index].value;
-        const isComplited = props.items[index].isComplited;
+    const itemsList = Object.keys(props.items).map((item, index) => {
+        const value = props.items[item].value;
+        const isComplited = props.items[item].isComplited;
         return (
-            <li key={key}>
-                <ListItem index={key} value={value} isComplited={isComplited} onChange={props.onChange} />
+            <li key={index}>
+                <Item index={index} value={value} isComplited={isComplited} onChange={props.onChange} />
             </li>
         )
     })
     return (
         <ul>
-            {listItems}
+            {itemsList}
         </ul>
     )
 }

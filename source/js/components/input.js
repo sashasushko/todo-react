@@ -6,9 +6,7 @@ export default class Input extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: props.value,
-            placeholder: props.placeholder,
-            clearAfterSubmit: props.clearAfterSubmit || false,
+            value: props.value
         };
         this.submitValue = this.submitValue.bind(this);
         this.inputValue = this.inputValue.bind(this);
@@ -16,8 +14,11 @@ export default class Input extends React.Component {
 
     submitValue(event) {
         event.preventDefault();
-        this.props.onSubmit(this.state.value);
-        this.state.clearAfterSubmit && this.setState({ value: '' })
+        this.props.onSubmit({
+            action: 'submit',
+            value: this.state.value
+        });
+        this.props.clearAfterSubmit && this.setState({ value: '' })
     }
 
     inputValue(event) {
@@ -29,7 +30,7 @@ export default class Input extends React.Component {
     render() {
         return (
             <form onSubmit={this.submitValue}>
-                <input type="text" placeholder={this.state.placeholder} value={this.state.value} onChange={this.inputValue} />
+                <input type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.inputValue} />
             </form>
         );
     }

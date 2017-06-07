@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import Input from './input.js';
-
 export default class ListItem extends React.Component {
     constructor(props) {
         super(props);
@@ -11,8 +9,8 @@ export default class ListItem extends React.Component {
             isEditable: false
         }
         this.compliteItem = this.compliteItem.bind(this);
+        this.changeItem = this.changeItem.bind(this);
         this.editItem = this.editItem.bind(this);
-        this.saveItem = this.saveItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
     }
 
@@ -23,13 +21,13 @@ export default class ListItem extends React.Component {
         });
     }
 
-    editItem(event) {
+    changeItem(event) {
         this.setState({
             isEditable: true
         });
     }
 
-    saveItem(event) {
+    editItem(event) {
         const value = event.target.value;
         if (event.key && event.key !== 'Enter') {
             return;
@@ -64,18 +62,18 @@ export default class ListItem extends React.Component {
             isComplited ? 'complite' : ''
         ]
         return (
-            <div className={classNames.join(' ')}>
+            <div className={classNames.join(' ').trim()}>
                 <div className="view">
                     <input type="checkbox" checked={isComplited} onChange={this.compliteItem} />
-                    <span className="title" onClick={this.editItem}>{value}</span>
+                    <span className="title" onClick={this.changeItem}>{value}</span>
                     <button type="button" onClick={this.removeItem}>Удалить</button>
                 </div>
                 <input
                     className="edit"
                     type="text"
                     defaultValue={value}
-                    onBlur={this.saveItem}
-                    onKeyPress={this.saveItem}
+                    onBlur={this.editItem}
+                    onKeyPress={this.editItem}
                     ref={(input) => { if(input) ReactDOM.findDOMNode(input).focus()}}
                 />
             </div>
