@@ -5,12 +5,16 @@ import PropTypes from 'prop-types';
 import ListItem from './listItem.js';
 
 export default function List(props) {
-    const listItems = props.items.map((value, index) => (
-        <li key={index}>
-            <ListItem index={index} value={value} onChange={props.onChange} />
-        </li>
-    ));
-
+    const listItems = Object.keys(props.items).map((index) => {
+        const key = Number(index);
+        const value = props.items[index].value;
+        const isComplited = props.items[index].isComplited;
+        return (
+            <li key={key}>
+                <ListItem index={key} value={value} isComplited={isComplited} onChange={props.onChange} />
+            </li>
+        )
+    })
     return (
         <ul>
             {listItems}
@@ -19,10 +23,10 @@ export default function List(props) {
 }
 
 List.propTypes = {
-    items: PropTypes.array,
+    items: PropTypes.object,
     onChange: PropTypes.func
 };
 
 List.defaultProps = {
-    items: []
+    items: {}
 }

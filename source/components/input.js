@@ -18,7 +18,7 @@ export default class Input extends React.Component {
 
     submitValue(event) {
         event.preventDefault();
-        this.props.onSubmit && this.props.onSubmit(this.state.value);
+        this.props.onSubmit(this.state.value);
         this.state.clearAfterSubmit && this.setState({ value: '' })
     }
 
