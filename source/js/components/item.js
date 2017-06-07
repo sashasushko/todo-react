@@ -82,7 +82,7 @@ export default class ListItem extends React.Component {
 }
 
 ListItem.propTypes = {
-    index: PropTypes.number.isRequired,
+    index: PropTypes.string.isRequired,
     value: PropTypes.string,
     isComplited: PropTypes.bool,
     onChange: PropTypes.func

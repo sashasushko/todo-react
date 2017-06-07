@@ -10,30 +10,30 @@ export default class ToDo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filter: {
+            filters: {
                 all: {
-                    value: 'Все',
+                    label: 'Все',
                     isSelected: true
                 },
                 active: {
-                    value: 'Выполненные',
+                    label: 'Выполненные',
                     isSelected: false
                 },
                 complite: {
-                    value: 'Не выполненные',
+                    label: 'Не выполненные',
                     isSelected: false
                 }
             },
             items: {
-                1: {
+                0: {
                     isComplited: false,
                     value: 'Попить чай'
                 },
-                2: {
+                1: {
                     isComplited: false,
                     value: 'Пообедать'
                 },
-                3: {
+                2: {
                     isComplited: false,
                     value: 'Прогуляться'
                 }
@@ -132,7 +132,7 @@ export default class ToDo extends React.Component {
             itemsKeys.forEach((index) => {
                 items[index].isComplited && complitedLength++
             });
-            const allDone = (allLength == complitedLength) ? true : false;
+            const allDone = (allLength == complitedLength && allLength !== 0) ? true : false;
             return {
                 allLength,
                 complitedLength,
@@ -153,8 +153,6 @@ export default class ToDo extends React.Component {
                     {' '}
                     {this.state.allLength - this.state.complitedLength}
                 </span>
-                <Filter options={this.state.filter} />
-                <button>Удалить выполненные</button>
             </div>
         );
     }
