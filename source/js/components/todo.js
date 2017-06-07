@@ -24,21 +24,8 @@ export default class ToDo extends React.Component {
                     isSelected: false
                 }
             },
-            items: {
-                0: {
-                    isComplited: false,
-                    value: 'Попить чай'
-                },
-                1: {
-                    isComplited: false,
-                    value: 'Пообедать'
-                },
-                2: {
-                    isComplited: false,
-                    value: 'Прогуляться'
-                }
-            },
-            allLength: 3,
+            items: {},
+            allLength: 0,
             complitedLength: 0,
             allDone: false
         };
@@ -145,7 +132,10 @@ export default class ToDo extends React.Component {
         return (
             <div>
                 <h1>ТуДу</h1>
-                <input type="checkbox" checked={this.state.allDone} onChange={this.compliteAll} />
+                <label>
+                    <input type="checkbox" checked={this.state.allDone} onChange={this.compliteAll} />
+                    Все сделано
+                </label>
                 <Input onSubmit={this.changeItem} />
                 <List items={this.state.items} onChange={this.changeItem} />
                 <span>
