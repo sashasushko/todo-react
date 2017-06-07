@@ -59,8 +59,12 @@ export default class ListItem extends React.Component {
         const value = this.props.value;
         const isComplited = this.props.isComplited;
         const isEditable = this.state.isEditable;
+        const classNames = [
+            isEditable ? 'editable' : 'noEditable',
+            isComplited ? 'complite' : ''
+        ]
         return (
-            <div className={isEditable ? 'editable' : 'noEditable'}>
+            <div className={classNames.join(' ')}>
                 <div className="view">
                     <input type="checkbox" checked={isComplited} onChange={this.compliteItem} />
                     <span className="title" onClick={this.editItem}>{value}</span>
