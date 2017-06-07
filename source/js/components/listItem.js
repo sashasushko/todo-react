@@ -26,18 +26,21 @@ export default class ListItem extends React.Component {
     editItem(event) {
         this.setState({
             isEditable: true
-        })
+        });
     }
 
     saveItem(event) {
         const value = event.target.value;
-        this.setState({
-            isEditable: false
-        })
+        if (event.key && event.key !== 'Enter') {
+            return;
+        }
         if (!value) {
             this.removeItem();
             return;
         }
+        this.setState({
+            isEditable: false
+        });
         this.props.onChange({
             action: 'edit',
             index: this.props.index,
@@ -55,14 +58,22 @@ export default class ListItem extends React.Component {
     render() {
         const value = this.props.value;
         const isComplited = this.props.isComplited;
+        const isEditable = this.state.isEditable;
         return (
-            <div className={this.state.isEditable ? 'editable' : 'noEditable'}>
+            <div className={isEditable ? 'editable' : 'noEditable'}>
                 <div className="view">
                     <input type="checkbox" checked={isComplited} onChange={this.compliteItem} />
-                    <span onClick={this.editItem}>{value}</span>
+                    <span className="title" onClick={this.editItem}>{value}</span>
                     <button type="button" onClick={this.removeItem}>Удалить</button>
                 </div>
-                <input className="edit" type="text" defaultValue={value} onBlur={this.saveItem} />
+                <input
+                    className="edit"
+                    type="text"
+                    defaultValue={value}
+                    onBlur={this.saveItem}
+                    onKeyPress={this.saveItem}
+                    ref={(input) => { if(input) ReactDOM.findDOMNode(input).focus()}}
+                />
             </div>
         )
     }

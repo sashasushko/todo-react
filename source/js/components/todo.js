@@ -4,11 +4,30 @@ import ReactDOM from 'react-dom';
 import Input from './input.js';
 import List from './list.js';
 
+// ToDo
+// - выделение всех дел
+// - счётчик оставшихся
+// - сортировка
+// - оформление
+
 export default class ToDo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: {}
+            items: {
+                1: {
+                    isComplited: false,
+                    value: 'Попить чай'
+                },
+                2: {
+                    isComplited: false,
+                    value: 'Пообедать'
+                },
+                3: {
+                    isComplited: false,
+                    value: 'Прогуляться'
+                }
+            }
         };
         this.addItem = this.addItem.bind(this);
         this.changeValue = this.changeValue.bind(this);
