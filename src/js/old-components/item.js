@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -91,4 +91,4 @@ ListItem.propTypes = {
 ListItem.defaultProps = {
     value: '',
     isComplited: false
-}
+}*/

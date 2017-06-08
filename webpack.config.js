@@ -1,12 +1,10 @@
 const path = require('path');
 
 const config = {
-    entry: {
-        app: './source/js/app.js'
-    },
+    entry: './src/js/App.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js'
+        filename: 'App.js'
     },
     module: {
         rules: [
@@ -22,6 +20,10 @@ const config = {
                 ]
             }
         ]
+    },
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        port: 9000
     }
 };
 
