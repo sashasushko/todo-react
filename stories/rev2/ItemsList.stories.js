@@ -27,4 +27,16 @@ storiesOf('ItemsList', module)
         <ItemsList
             items={items}
         />
+    ))
+    .add('With сhangeable items', () => (
+        <ItemsList
+            items={items}
+            onChange={action('onChange')}
+        />
+    ))
+    .add('With removeable items', () => (
+        <ItemsList
+            items={items}
+            onRemove={action('onRemove')}
+        />
     ));

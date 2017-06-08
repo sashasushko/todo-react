@@ -1,37 +1,36 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ItemCreator from './ItemCreator';
-import List from './List';
+import ItemsList from './ItemsList';
 
 export default class ToDo extends React.Component {
     constructor(props) {
         super(props);
+        const { value, items } = props;
         this.state = {
-            items: [
-                {
-                    label: 'Some label',
-                    checked: true,
-                    editable: false
-                }
-            ]
+            newValue: value,
+            items: items
         }
     }
     render() {
-        const { items } = this.state;
+        const { newValue, items } = this.state;
         return (
             <div>
                 <ItemCreator
-                    onCreate={(label) => {
-                        const newItem = {
-                            label,
-                            checked: false,
-                            editable: false
-                        };
-                        this.setState({ items: [...items, newItem] });
+                    value={newValue}
+                    onChange={value => this.setState({ newValue: value })}
+                    onCreate={() => {
+                        if (newValue) {
+                            const newItem = {
+                                value: newValue,
+                                complited: false
+                            };
+                            this.setState({ items: [...items, newItem] });
+                            this.setState({ newValue: '' });
+                        }
                     }}
                 />
-                <List
+                <ItemsList
                     items={items}
                     onChange={(index, update) => {
                         this.setState({
@@ -54,4 +53,14 @@ export default class ToDo extends React.Component {
             </div>
         )
     }
+}
+
+ToDo.PropTypes = {
+    value: PropTypes.string,
+    items: PropTypes.array
+}
+
+ToDo.defaultProps = {
+    value: '',
+    items: []
 }

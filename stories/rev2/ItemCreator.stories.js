@@ -2,19 +2,19 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import AddItem from '../src/js/components/AddItem';
+import ItemCreator from '../src/js/components/ItemCreator';
 
-storiesOf('AddItem', module)
+storiesOf('ItemCreator', module)
     .add('Empty', () => (
-        <AddItem
+        <ItemCreator
             onChange={action('onChange')}
-            onAddItem={action('onAddItem')}
+            onCreate={action('onCreate')}
         />
     ))
     .add('With preseted value', () => (
-        <AddItem
+        <ItemCreator
             value='Съесть булок да выпить чаю'
             onChange={action('onChange')}
-            onAddItem={action('onAddItem')}
+            onCreate={action('onCreate')}
         />
     ));

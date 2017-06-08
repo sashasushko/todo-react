@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import Item from './Item';
 
 export default function ItemsList(props) {
-    const { items, onChange } = props;
+    const { items, onChange, onRemove } = props;
     const itemsList = items.map((data, index) => {
         return (
             <li key={index}>
                 <Item
-                    index={index}
                     data={data}
-                    onChange={onChange}
+                    onChange={onChange && ((update) => onChange(index, update))}
+                    onRemove={onRemove && (() => onRemove(index))}
                 />
             </li>
         )
@@ -22,7 +22,8 @@ export default function ItemsList(props) {
 
 ItemsList.PropTypes = {
     items: PropTypes.array,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func,
+    onRemove: PropTypes.func
 }
 
 ItemsList.defaultProps = {
