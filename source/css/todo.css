@@ -1,7 +1,0 @@
-.editable .view,
-.noEditable .edit {
-    display: none;
-}
-.complite .title {
-    text-decoration: line-through;
-}
