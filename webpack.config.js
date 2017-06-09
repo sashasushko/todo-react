@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
     entry: './src/js/App.js',
@@ -10,10 +11,12 @@ const config = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
+                exclude: /node_modules|dist/,
                 use: 'babel-loader'
             },
             {
                 test: /\.css$/,
+                exclude: /node_modules|dist/,
                 use: [
                     'style-loader',
                     'css-loader'
@@ -21,6 +24,15 @@ const config = {
             }
         ]
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            inject: 'body',
+            minify: {
+                collapseWhitespace: true
+            }
+        })
+    ],
     devServer: {
         contentBase: path.join(__dirname, "dist"),
         port: 9000
