@@ -6,30 +6,26 @@ import Input from '../src/js/components/Input';
 
 storiesOf('Input', module)
     .add('default', () => (
-        <Input />
-    ))
-    .add('with value', () => (
-        <Input
-            value='Some value'
-        />
-    ))
-    .add('with autofocus', () => (
-        <Input
-            autofocus={true}
-        />
-    ))
-    .add('with onChange', () => (
         <Input
             onChange={action('onChange')}
-        />
-    ))
-    .add('with onBlur', () => (
-        <Input
             onBlur={action('onBlur')}
+            onKeyDown={action('onKeyDown')}
         />
     ))
-    .add('with onKeyDown', () => (
+    .add('with value by default', () => (
         <Input
+            value='Some value'
+            onChange={action('onChange')}
+            onBlur={action('onBlur')}
+            onKeyDown={action('onKeyDown')}
+        />
+    ))
+    .add('with value and autofocus by default', () => (
+        <Input
+            value='Some value'
+            focus={true}
+            onChange={action('onChange')}
+            onBlur={action('onBlur')}
             onKeyDown={action('onKeyDown')}
         />
     ));

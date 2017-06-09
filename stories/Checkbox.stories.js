@@ -5,16 +5,20 @@ import { action } from '@storybook/addon-actions';
 import Checkbox from '../src/js/components/Checkbox';
 
 storiesOf('Checkbox', module)
-    .add('default', () => (
-        <Checkbox />
+    .add('unchecked', () => (
+        <Checkbox
+            onChange={action('onChange')}
+        />
     ))
     .add('checked', () => (
         <Checkbox
             checked={true}
+            onChange={action('onChange')}
         />
     ))
-    .add('with onChange', () => (
+    .add('with label', () => (
         <Checkbox
+            label='I am cool'
             onChange={action('onChange')}
         />
     ));
