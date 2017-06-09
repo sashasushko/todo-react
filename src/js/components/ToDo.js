@@ -39,24 +39,24 @@ export default class ToDo extends React.Component {
                         />
                     )
                 }
-                <hr/>
-                    <Input
-                        value={newItemValue}
-                        onChange={value => this.setState({ newItemValue: value })}
-                        onKeyDown={key => {
-                            if (key === 'Enter' && newItemValue.trim()) {
-                                const newItem = {
-                                    value: newItemValue.trim(),
-                                    checked: false
-                                };
-                                this.setState({
-                                    items: [...items, newItem],
-                                    newItemValue: ''
-                                });
-                            }
-                        }}
-                    />
-                <hr/>
+                <hr />
+                <Input
+                    value={newItemValue}
+                    onChange={value => this.setState({ newItemValue: value })}
+                    onKeyDown={key => {
+                        if (key === 'Enter' && newItemValue.trim()) {
+                            const newItem = {
+                                value: newItemValue.trim(),
+                                checked: false
+                            };
+                            this.setState({
+                                items: [...items, newItem],
+                                newItemValue: ''
+                            });
+                        }
+                    }}
+                />
+                <hr />
                 <List
                     items={items}
                     onChange={(index, update) => {
