@@ -39,7 +39,7 @@ export default class ToDo extends React.Component {
                         />
                     )
                 }
-                <div>
+                <hr/>
                     <Input
                         value={newItemValue}
                         onChange={value => this.setState({ newItemValue: value })}
@@ -56,7 +56,7 @@ export default class ToDo extends React.Component {
                             }
                         }}
                     />
-                </div>
+                <hr/>
                 <List
                     items={items}
                     onChange={(index, update) => {
@@ -77,9 +77,15 @@ export default class ToDo extends React.Component {
                         });
                     }}
                 />
+                {/* Хочется так: */}
                 {/*<List>
                     <Item />
                 </List>*/}
+                {
+                    !!itemsLength && (
+                        <div>Left: {itemsLength - complitedItemsLength}</div>
+                    )
+                }
             </div>
         )
     }
