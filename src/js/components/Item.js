@@ -27,12 +27,12 @@ export default class EditableItem extends React.Component {
     }
 
     handleInputKeyDown(key) {
-        const { sourceValue } = this.state;
+        const { value } = this.props;
 
         if (key === 'Enter')
             this.updateItemValue();
         if (key === 'Escape')
-            this.setState({ editable: false, value: sourceValue });
+            this.setState({ editable: false, value });
     }
 
     render() {
@@ -48,7 +48,7 @@ export default class EditableItem extends React.Component {
                 {
                     !editable && (
                         <span
-                            onClick={() => this.setState({ editable: true, sourceValue: value, value })}
+                            onClick={() => this.setState({ editable: true })}
                         >{value}</span>
                     )
                 }

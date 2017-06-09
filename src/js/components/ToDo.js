@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 import Checkbox from './Checkbox';
 import Input from './Input';
 import List from './List';
+import Filter from './Filter';
 
 export default class ToDo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             items: props.items,
-            value: props.value
+            value: props.value,
+            filter: null
         }
     }
 
@@ -51,12 +53,11 @@ export default class ToDo extends React.Component {
     }
 
     handleInputKeyDown(key) {
-        const { value: srcValue, items } = this.state;
-        const value = srcValue.trim();
+        const { value, items } = this.state;
 
-        if (key === 'Enter' && value) {
+        if (key === 'Enter' && value.trim()) {
             const newItem = {
-                value,
+                value: value.trim(),
                 checked: false
             };
             this.setState({
@@ -67,7 +68,7 @@ export default class ToDo extends React.Component {
     }
 
     render() {
-        const { items, value } = this.state;
+        const { items, value, filter } = this.state;
         const { placeholder } = this.props;
 
         return (
@@ -93,6 +94,7 @@ export default class ToDo extends React.Component {
                 </div>
                 <List
                     items={items}
+                    filter={filter}
                     onChange={(index, update) => this.handleItemChange(index, update)}
                     onRemove={index => this.handleItemRemove(index)}
                 />
@@ -101,6 +103,9 @@ export default class ToDo extends React.Component {
                         <div>Left: {items.filter(x => !x.checked).length}</div>
                     )
                 }
+                <Filter
+                    onChange={filter => this.setState({ filter })}
+                />
             </div>
         )
     }
