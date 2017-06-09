@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+
+import Checkbox from './Checkbox';
 import ItemCreator from './ItemCreator';
 import Item from './Item';
 
@@ -8,12 +10,7 @@ export default class ToDo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: [
-                {
-                    value: 'Some label',
-                    checked: false
-                }
-            ],
+            items: props.items,
             allChecked: false
         }
     }
@@ -48,24 +45,23 @@ export default class ToDo extends React.Component {
         });
         return (
             <div>
-                <input
-                    type='checkbox'
+                <Checkbox
                     checked={allChecked}
-                    onChange={() => {
-                        const updatedItems = items.map(item => {
-                            item.checked = !allChecked;
+                    onChange={checked => {
+                        const items = items.map(item => {
+                            item.checked = checked;
                             return item;
                         })
                         this.setState({
-                            items: updatedItems,
-                            allChecked: !allChecked
+                            items,
+                            allChecked: checked
                         });
                     }}
                 />
                 <ItemCreator
                     onCreate={value => {
                         const newItem = {
-                            value,
+                            value: value.trim(),
                             checked: false
                         };
                         this.setState({ items: [...items, newItem] });
@@ -76,3 +72,11 @@ export default class ToDo extends React.Component {
         )
     }
 }
+
+ToDo.propTypes = {
+    items: PropTypes.array
+};
+
+ToDo.defaultProps = {
+    items: []
+};

@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import Input from './Input';
+
 export default class ItemCreator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ''
+            value: props.value
         }
     }
     render() {
@@ -14,12 +16,12 @@ export default class ItemCreator extends React.Component {
         const { onCreate } = this.props;
         return (
             <div>
-                <input
+                <Input
                     value={value}
-                    onChange={event => this.setState({ value: event.target.value })}
-                    onKeyPress={event => {
-                        if (event.key === 'Enter' && value) {
-                            onCreate(value);
+                    onChange={value => this.setState({ value })}
+                    onKeyDown={key => {
+                        if (key === 'Enter' && value.trim()) {
+                            onCreate && onCreate(value);
                             this.setState({ value: '' });
                         }
                     }}
@@ -28,3 +30,12 @@ export default class ItemCreator extends React.Component {
         )
     }
 }
+
+ItemCreator.propTypes = {
+    value: PropTypes.string,
+    onCreate: PropTypes.func
+};
+
+ItemCreator.defaultProps = {
+    value: ''
+};

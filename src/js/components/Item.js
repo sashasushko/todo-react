@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import Checkbox from './Checkbox';
+import Input from './Input';
+
 export default class Item extends React.Component {
     constructor(props) {
         super(props);
@@ -13,52 +16,43 @@ export default class Item extends React.Component {
     render() {
         const { value, checked, onChange, onRemove } = this.props;
         const { updatable, updatedValue } = this.state;
+        function updateValue() {
+            const trimmedValue = updatedValue.trim();
+            if (trimmedValue)
+                onChange && onChange({ value: trimmedValue });
+            else
+                onRemove && onRemove();
+            this.setState({ updatable: false });
+        }
         return (
             <div>
-                <input
-                    type='checkbox'
+                <Checkbox
                     checked={checked}
-                    onChange={event => onChange({ checked: event.target.checked })}
+                    onChange={checked => onChange && onChange({ checked })}
                 />
-                {!updatable && (
-                    <span
-                        onClick={() => this.setState({ updatable: true })}
-                    >{value}</span>
-                )}
-                {updatable && (
-                    <input
-                        value={updatedValue}
-                        autoFocus={updatable}
-                        onChange={event => this.setState({ updatedValue: event.target.value })}
-                        onBlur={() => {
-                            if (updatedValue) {
-                                onChange({ value: updatedValue });
-                            } else {
-                                onRemove();
-                            }
-                            this.setState({ updatable: false });
-                        }}
-                        onKeyPress={event => {
-                            if (event.key !== 'Enter') {
-                                return;
-                            }
-                            if (updatedValue) {
-                                onChange({ value: updatedValue });
-                            } else {
-                                onRemove();
-                            }
-                            this.setState({ updatable: false });
-                        }}
-                        onKeyDown={event => {
-                            if (event.key === 'Escape') {
-                                this.setState({
-                                    updatable: false,
-                                    updatedValue: value
-                                });
-                            }
-                        }}
-                    />
-                )}
+                {
+                    !updatable && (
+                        <span
+                            onClick={() => this.setState({ updatable: true })}
+                        >{value}</span>
+                    )
+                }
+                {
+                    updatable && (
+                        <Input
+                            value={updatedValue}
+                            focus={updatable}
+                            onChange={value => this.setState({ updatedValue: value })}
+                            onBlur={() => updateValue.call(this)}
+                            onKeyDown={key => {
+                                if (key === 'Enter')
+                                    updateValue.call(this);
+                                if (key === 'Escape')
+                                    this.setState({ updatable: false, updatedValue: value });
+                            }}
+                        />
+                    )
+                }
                 <button
                     onClick={onRemove}
                 >Удалить</button>
@@ -66,3 +60,14 @@ export default class Item extends React.Component {
         )
     }
 }
+
+Item.propTypes = {
+    value: PropTypes.string.isRequired,
+    checked: PropTypes.bool,
+    onChange: PropTypes.func,
+    onRemove: PropTypes.func
+};
+
+Item.defaultProps = {
+    checked: false
+};
