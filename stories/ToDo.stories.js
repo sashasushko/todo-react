@@ -19,19 +19,24 @@ storiesOf('ToDo', module)
     .add('default', () => (
         <ToDo />
     ))
-    .add('with presetted items', () => (
+    .add('with items', () => (
         <ToDo
             items={items}
         />
     ))
-    .add('with presetted value', () => (
+    .add('with placeholder', () => (
         <ToDo
-            presettedValue='Read again'
+            placeholder='Write something'
         />
     ))
-    .add('with presetted items and value', () => (
+    .add('with value for new item', () => (
         <ToDo
-            presettedValue='Read again'
+            value='Read again'
+        />
+    ))
+    .add('with items and value for new item', () => (
+        <ToDo
+            value='Read again'
             items={items}
         />
     ));

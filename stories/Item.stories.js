@@ -2,18 +2,18 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import EditableItem from '../src/js/components/EditableItem';
+import Item from '../src/js/components/Item';
 
-storiesOf('EditableItem', module)
+storiesOf('Item', module)
     .add('default', () => (
-        <EditableItem
+        <Item
             value='Some value'
             onChange={action('onChange')}
             onRemove={action('onRemove')}
         />
     ))
     .add('checked by default', () => (
-        <EditableItem
+        <Item
             value='Some value'
             checked={true}
             onChange={action('onChange')}
@@ -21,14 +21,14 @@ storiesOf('EditableItem', module)
         />
     ))
     .add('editable by default', () => (
-        <EditableItem
+        <Item
             value='Some value'
             editable={true}
             onChange={action('onChange')}
         />
     ))
     .add('checked and editable by default', () => (
-        <EditableItem
+        <Item
             value='Some value'
             checked={true}
             editable={true}

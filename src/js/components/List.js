@@ -2,27 +2,30 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import EditableItem from './EditableItem';
+import Item from './Item';
 
 export default function List(props) {
     const { items, onChange, onRemove } = props;
+
     const itemsList = items.map((item, index) => {
         const { value, checked } = item;
         return (
             <li key={index}>
-                <EditableItem
+                <Item
                     value={value}
                     checked={checked}
-                    onChange={update => onChange && onChange(index, update)}
-                    onRemove={() => onRemove && onRemove(index)}
+                    onChange={update => onChange(index, update)}
+                    onRemove={() => onRemove(index)}
                 />
             </li>
         )
     });
     return (
-        <ul>
-            {itemsList}
-        </ul>
+        <div>
+            <ul>
+                {itemsList}
+            </ul>
+        </div>
     )
 }
 
@@ -33,5 +36,7 @@ List.propTypes = {
 };
 
 List.defaultProps = {
-    items: []
+    items: [],
+    onChange: () => { },
+    onRemove: () => { }
 };

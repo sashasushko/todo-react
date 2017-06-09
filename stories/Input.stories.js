@@ -12,6 +12,14 @@ storiesOf('Input', module)
             onKeyDown={action('onKeyDown')}
         />
     ))
+    .add('with placeholder', () => (
+        <Input
+            placeholder='Write something'
+            onChange={action('onChange')}
+            onBlur={action('onBlur')}
+            onKeyDown={action('onKeyDown')}
+        />
+    ))
     .add('with value by default', () => (
         <Input
             value='Some value'
@@ -23,7 +31,7 @@ storiesOf('Input', module)
     .add('with value and autofocus by default', () => (
         <Input
             value='Some value'
-            focus={true}
+            autoFocus={true}
             onChange={action('onChange')}
             onBlur={action('onBlur')}
             onKeyDown={action('onKeyDown')}

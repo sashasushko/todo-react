@@ -10,7 +10,7 @@ export default function Checkbox(props) {
                 type='checkbox'
                 label={label}
                 checked={checked}
-                onChange={event => onChange && onChange(event.target.checked)}
+                onChange={event => onChange(event.target.checked)}
             />
             {label}
         </label>
@@ -25,5 +25,6 @@ Checkbox.propTypes = {
 
 Checkbox.defaultProps = {
     checked: false,
-    label: ''
+    label: '',
+    onChange: () => {}
 };

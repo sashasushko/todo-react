@@ -11,79 +11,94 @@ export default class ToDo extends React.Component {
         super(props);
         this.state = {
             items: props.items,
-            newItemValue: props.presettedValue
+            value: props.value
         }
     }
+
+    handleAllDoneChange(checked) {
+        const { items } = this.state;
+        const newItems = items.map(item => {
+            item.checked = checked;
+            return item;
+        });
+        this.setState({
+            items: newItems,
+            allItemsChecked: checked
+        });
+    }
+
+    handleItemChange(index, update) {
+        const { items } = this.state;
+
+        this.setState({
+            items: [
+                ...items.slice(0, index),
+                Object.assign(items[index], update),
+                ...items.slice(index + 1)
+            ]
+        });
+    }
+
+    handleItemRemove(index) {
+        const { items } = this.state;
+
+        this.setState({
+            items: [
+                ...items.slice(0, index),
+                ...items.slice(index + 1)
+            ]
+        });
+    }
+
+    handleInputKeyDown(key) {
+        const { value: srcValue, items } = this.state;
+        const value = srcValue.trim();
+
+        if (key === 'Enter' && value) {
+            const newItem = {
+                value,
+                checked: false
+            };
+            this.setState({
+                items: [...items, newItem],
+                value: ''
+            });
+        }
+    }
+
     render() {
-        const { items, newItemValue } = this.state;
-        const itemsLength = items.length;
-        const complitedItemsLength = items.reduce((counter, item) => (item.checked ? ++counter : counter), 0);
-        const allDone = (complitedItemsLength === itemsLength) ? true : false;
+        const { items, value } = this.state;
+        const { placeholder } = this.props;
+
         return (
             <div>
                 {
-                    !!itemsLength && (
-                        <Checkbox
-                            checked={allDone}
-                            label='All done'
-                            onChange={checked => {
-                                const newItems = items.map(item => {
-                                    item.checked = checked;
-                                    return item;
-                                })
-                                this.setState({
-                                    items: newItems,
-                                    allItemsChecked: checked
-                                });
-                            }}
-                        />
+                    (items.length != 0) && (
+                        <div>
+                            <Checkbox
+                                checked={items.every(x => x.checked)}
+                                label='All done'
+                                onChange={checked => this.handleAllDoneChange(checked)}
+                            />
+                        </div>
                     )
                 }
-                <hr />
-                <Input
-                    value={newItemValue}
-                    onChange={value => this.setState({ newItemValue: value })}
-                    onKeyDown={key => {
-                        if (key === 'Enter' && newItemValue.trim()) {
-                            const newItem = {
-                                value: newItemValue.trim(),
-                                checked: false
-                            };
-                            this.setState({
-                                items: [...items, newItem],
-                                newItemValue: ''
-                            });
-                        }
-                    }}
-                />
-                <hr />
+                <div>
+                    <Input
+                        value={value}
+                        placeholder={placeholder}
+                        onChange={value => this.setState({ value })}
+                        onKeyDown={key => this.handleInputKeyDown(key)}
+                    />
+                </div>
                 <List
                     items={items}
-                    onChange={(index, update) => {
-                        this.setState({
-                            items: [
-                                ...items.slice(0, index),
-                                Object.assign(items[index], update),
-                                ...items.slice(index + 1)
-                            ]
-                        });
-                    }}
-                    onRemove={index => {
-                        this.setState({
-                            items: [
-                                ...items.slice(0, index),
-                                ...items.slice(index + 1)
-                            ]
-                        });
-                    }}
+                    onChange={(index, update) => this.handleItemChange(index, update)}
+                    onRemove={index => this.handleItemRemove(index)}
                 />
-                {/* Хочется так: */}
-                {/*<List>
-                    <Item />
-                </List>*/}
                 {
-                    !!itemsLength && (
-                        <div>Left: {itemsLength - complitedItemsLength}</div>
+                    (items.length != 0) && (
+                        <div>Left: {items.filter(x => !x.checked).length}</div>
                     )
                 }
             </div>
@@ -93,10 +108,12 @@ export default class ToDo extends React.Component {
 
 ToDo.propTypes = {
     items: PropTypes.array,
-    presettedValue: PropTypes.string
+    value: PropTypes.string,
+    placeholder: PropTypes.string
 };
 
 ToDo.defaultProps = {
     items: [],
-    presettedValue: ''
+    value: '',
+    placeholder: ''
 };
