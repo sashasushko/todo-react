@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ItemCreator from './ItemCreator';
-import List from './List';
+import Item from './Item';
 
 export default class ToDo extends React.Component {
     constructor(props) {
@@ -10,30 +10,23 @@ export default class ToDo extends React.Component {
         this.state = {
             items: [
                 {
-                    label: 'Some label',
-                    checked: true,
-                    editable: false
+                    value: 'Some label',
+                    checked: false
                 }
-            ]
+            ],
+            allChecked: false
         }
     }
     render() {
-        const { items } = this.state;
-        return (
-            <div>
-                <ItemCreator
-                    onCreate={(label) => {
-                        const newItem = {
-                            label,
-                            checked: false,
-                            editable: false
-                        };
-                        this.setState({ items: [...items, newItem] });
-                    }}
-                />
-                <List
-                    items={items}
-                    onChange={(index, update) => {
+        const { items, allChecked } = this.state;
+        const todoItemsList = items.map((item, index) => {
+            const { value, checked } = item;
+            return (
+                <Item
+                    key={index}
+                    value={value}
+                    checked={checked}
+                    onChange={update => {
                         this.setState({
                             items: [
                                 ...items.slice(0, index),
@@ -42,7 +35,7 @@ export default class ToDo extends React.Component {
                             ]
                         });
                     }}
-                    onRemove={index => {
+                    onRemove={() => {
                         this.setState({
                             items: [
                                 ...items.slice(0, index),
@@ -51,6 +44,34 @@ export default class ToDo extends React.Component {
                         });
                     }}
                 />
+            )
+        });
+        return (
+            <div>
+                <input
+                    type='checkbox'
+                    checked={allChecked}
+                    onChange={() => {
+                        const updatedItems = items.map(item => {
+                            item.checked = !allChecked;
+                            return item;
+                        })
+                        this.setState({
+                            items: updatedItems,
+                            allChecked: !allChecked
+                        });
+                    }}
+                />
+                <ItemCreator
+                    onCreate={value => {
+                        const newItem = {
+                            value,
+                            checked: false
+                        };
+                        this.setState({ items: [...items, newItem] });
+                    }}
+                />
+                {todoItemsList}
             </div>
         )
     }
