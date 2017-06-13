@@ -34,7 +34,6 @@ export default function Filter(props) {
 }
 
 Filter.propTypes = {
-    filter: PropTypes.bool,
     onChange: PropTypes.func
 };
 
