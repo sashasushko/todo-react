@@ -143,15 +143,15 @@ export default class ToDo extends React.Component {
                     )
                 }
                 {
-                    (items.filter(i => i.checked).length != 0) && (
-                        <button onClick={() => this.handleCompletedClear()}>Clear completed</button>
-                    )
-                }
-                {
                     (items.length != 0) && (
                         <Filter
                             onChange={filter => this.setState({ filter })}
                         />
+                    )
+                }
+                {
+                    (items.filter(i => i.checked).length != 0) && (
+                        <button onClick={() => this.handleCompletedClear()}>Clear completed</button>
                     )
                 }
             </div>
