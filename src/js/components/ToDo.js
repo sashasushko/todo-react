@@ -81,6 +81,14 @@ export default class ToDo extends React.Component {
         });
     }
 
+    handleCompletedClear() {
+        const { items } = this.state;
+
+        this.setState({
+            items: items.filter(i => !i.checked)
+        })
+    }
+
     handleInputKeyDown(key) {
         const { value, items } = this.state;
 
@@ -134,7 +142,12 @@ export default class ToDo extends React.Component {
                 />
                 {
                     (items.length != 0) && (
-                        <div>Left: {items.filter(x => !x.checked).length}</div>
+                        <div>Left: {items.filter(i => !i.checked).length}</div>
+                    )
+                }
+                {
+                    (items.filter(i => i.checked).length != 0) && (
+                        <button onClick={() => this.handleCompletedClear()}>Clear completed</button>
                     )
                 }
                 {
