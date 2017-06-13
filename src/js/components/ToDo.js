@@ -87,9 +87,14 @@ export default class ToDo extends React.Component {
 
     filterItems() {
         const { filter, items } = this.state;
-        const temp = items.filter(item => item.checked === filter);
 
-        return (filter === null) ? items : temp;
+        if (filter === null) {
+            return items;
+        }
+
+        const filtredItems = items.filter(item => item.checked === filter);
+
+        return filtredItems;
     }
 
     render() {
