@@ -10,8 +10,7 @@ export default class EditableItem extends React.Component {
         super(props);
         this.state = {
             value: props.value,
-            editable: props.editable,
-            sourceValue: null
+            editable: props.editable
         }
     }
 

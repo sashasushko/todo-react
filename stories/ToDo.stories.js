@@ -6,10 +6,12 @@ import ToDo from '../src/js/components/ToDo';
 
 const items = [
     {
+        id: 0,
         value: 'Read "Clean Code"',
         checked: true,
     },
     {
+        id: 1,
         value: 'Write clean code',
         checked: false,
     }
@@ -22,6 +24,12 @@ storiesOf('ToDo', module)
     .add('with items', () => (
         <ToDo
             items={items}
+        />
+    ))
+    .add('with filter', () => (
+        <ToDo
+            items={items}
+            filterEnable={true}
         />
     ))
     .add('with placeholder', () => (

@@ -6,10 +6,12 @@ import List from '../src/js/components/List';
 
 const items = [
     {
+        id: 0,
         value: 'Read "Clean Code"',
         checked: true,
     },
     {
+        id: 1,
         value: 'Write clean code',
         checked: false,
     }

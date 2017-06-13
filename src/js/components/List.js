@@ -7,20 +7,16 @@ import Item from './Item';
 export default function List(props) {
     const { items, filter, onChange, onRemove } = props;
 
-    const itemsList = items.map((item, index) => {
-        const { value, checked } = item;
+    const itemsList = items.map((item) => {
+        const { id, value, checked } = item;
         return (
-            <li key={index}>
-                {
-                    (checked === filter) || (
-                        <Item
-                            value={value}
-                            checked={checked}
-                            onChange={update => onChange(index, update)}
-                            onRemove={() => onRemove(index)}
-                        />
-                    )
-                }
+            <li key={id}>
+                <Item
+                    value={value}
+                    checked={checked}
+                    onChange={update => onChange(id, update)}
+                    onRemove={() => onRemove(id)}
+                />
             </li>
         )
     });
