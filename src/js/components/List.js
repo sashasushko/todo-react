@@ -5,17 +5,17 @@ import PropTypes from 'prop-types';
 import Item from './Item';
 
 export default function List(props) {
-    const { items, onChange, onRemove } = props;
+    const { items, filter, onChange, onRemove } = props;
 
-    const itemsList = items.map((item, index) => {
-        const { value, checked } = item;
+    const itemsList = items.map((item) => {
+        const { id, value, checked } = item;
         return (
-            <li key={index}>
+            <li key={id}>
                 <Item
                     value={value}
                     checked={checked}
-                    onChange={update => onChange(index, update)}
-                    onRemove={() => onRemove(index)}
+                    onChange={update => onChange(id, update)}
+                    onRemove={() => onRemove(id)}
                 />
             </li>
         )
@@ -31,12 +31,14 @@ export default function List(props) {
 
 List.propTypes = {
     items: PropTypes.array,
+    filter: PropTypes.bool,
     onChange: PropTypes.func,
     onRemove: PropTypes.func
 };
 
 List.defaultProps = {
     items: [],
+    filter: null,
     onChange: () => { },
     onRemove: () => { }
 };
