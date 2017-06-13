@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Item from './Item';
 
 export default function List(props) {
-    const { items, filter, onChange, onRemove } = props;
+    const { items, onChange, onRemove } = props;
 
     const itemsList = items.map((item) => {
         const { id, value, checked } = item;
@@ -31,14 +31,12 @@ export default function List(props) {
 
 List.propTypes = {
     items: PropTypes.array,
-    filter: PropTypes.bool,
     onChange: PropTypes.func,
     onRemove: PropTypes.func
 };
 
 List.defaultProps = {
     items: [],
-    filter: null,
     onChange: () => { },
     onRemove: () => { }
 };

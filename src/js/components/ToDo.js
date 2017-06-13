@@ -13,8 +13,7 @@ export default class ToDo extends React.Component {
         this.state = {
             items: props.items,
             value: props.value,
-            filterEnable: props.filterEnable,
-            filter: null,
+            filter: props.filter,
             idCounter: props.items.length
         }
     }
@@ -99,18 +98,17 @@ export default class ToDo extends React.Component {
 
     filterItems() {
         const { filter, items } = this.state;
+        const filters = {
+            all: i => true,
+            active: i => !i.checked,
+            completed: i => i.checked 
+        };
 
-        if (filter === null) {
-            return items;
-        }
-
-        const filtredItems = items.filter(item => item.checked === filter);
-
-        return filtredItems;
+        return items.filter(filters[filter]);
     }
 
     render() {
-        const { items, value, filterEnable, filter } = this.state;
+        const { items, value, filter } = this.state;
         const { placeholder } = this.props;
 
         return (
@@ -136,7 +134,6 @@ export default class ToDo extends React.Component {
                 </div>
                 <List
                     items={this.filterItems()}
-                    filter={filter}
                     onChange={(index, update) => this.handleItemChange(index, update)}
                     onRemove={index => this.handleItemRemove(index)}
                 />
@@ -151,7 +148,7 @@ export default class ToDo extends React.Component {
                     )
                 }
                 {
-                    (items.length != 0) && (filterEnable) && (
+                    (items.length != 0) && (
                         <Filter
                             onChange={filter => this.setState({ filter })}
                         />
@@ -166,12 +163,12 @@ ToDo.propTypes = {
     items: PropTypes.array,
     value: PropTypes.string,
     placeholder: PropTypes.string,
-    filterEnable: PropTypes.bool
+    filter: PropTypes.string
 };
 
 ToDo.defaultProps = {
     items: [],
     value: '',
     placeholder: '',
-    filterEnable: false
+    filter: 'all'
 };

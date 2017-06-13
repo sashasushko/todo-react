@@ -12,22 +12,22 @@ export default function Filter(props) {
                     type='radio'
                     name='filter'
                     defaultChecked={true}
-                    onChange={() => onChange(null)}
+                    onChange={() => onChange('all')}
                 />All
             </label>
             <label>
                 <input
                     type='radio'
                     name='filter'
-                    onChange={() => onChange(false)}
+                    onChange={() => onChange('active')}
                 />Active
             </label>
             <label>
                 <input
                     type='radio'
                     name='filter'
-                    onChange={() => onChange(true)}
-                />Complited
+                    onChange={() => onChange('completed')}
+                />Completed
             </label>
         </fieldset>
     )
