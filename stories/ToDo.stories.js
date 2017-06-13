@@ -26,12 +26,6 @@ storiesOf('ToDo', module)
             items={items}
         />
     ))
-    .add('with filter', () => (
-        <ToDo
-            items={items}
-            filterEnable={true}
-        />
-    ))
     .add('with placeholder', () => (
         <ToDo
             placeholder='Write something'
