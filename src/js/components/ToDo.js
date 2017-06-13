@@ -69,6 +69,10 @@ export default class ToDo extends React.Component {
         const { items } = this.state;
         const index = items.findIndex(item => item.id == id);
 
+        if (index === -1) {
+            return;
+        }
+
         this.setState({
             items: [
                 ...items.slice(0, index),
