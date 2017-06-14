@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
+import styles from "./Todo.less";
+
 import Gapped from "retail-ui/components/Gapped";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
@@ -111,30 +113,12 @@ export default class Todo extends React.Component {
     const { placeholder } = this.props;
 
     return (
-      <div
-        style={{
-          maxWidth: "640px",
-          marginLeft: "auto",
-          marginRight: "auto",
-          padding: "30px 40px 40px",
-          outline: "1px solid rgba(0,0,0,0.1)"
-        }}
-      >
-        <h1 style={{ marginTop: 0, marginBottom: "40px" }}>Список дел</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Список дел</h1>
         <Gapped gap={30} vertical={true}>
           <Gapped gap={20} vertical={true}>
-            <div
-              style={{
-                display: "flex",
-                maxWidth: "580px",
-                width: "100%"
-              }}
-            >
-              <div
-                style={{
-                  flex: "auto"
-                }}
-              >
+            <div className={styles.header}>
+              <div className={styles.input}>
                 <Input
                   width="100%"
                   value={value}
@@ -144,13 +128,7 @@ export default class Todo extends React.Component {
                   onKeyDown={event => this.handleInputKeyDown(event.key)}
                 />
               </div>
-              <div
-                style={{
-                  paddingTop: "5px",
-                  paddingLeft: "20px",
-                  width: "110px"
-                }}
-              >
+              <div className={styles.checkAll}>
                 {items.length != 0 &&
                   <Checkbox
                     checked={items.every(x => x.checked)}
