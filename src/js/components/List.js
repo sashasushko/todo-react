@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import Gapped from '../../../node_modules/retail-ui/components/Gapped/Gapped';
 import Item from './Item';
 
 export default function List(props) {
@@ -10,22 +11,22 @@ export default function List(props) {
     const itemsList = items.map((item) => {
         const { id, value, checked } = item;
         return (
-            <li key={id}>
-                <Item
-                    value={value}
-                    checked={checked}
-                    onChange={update => onChange(id, update)}
-                    onRemove={() => onRemove(id)}
-                />
-            </li>
+            <Item
+                key={id}
+                value={value}
+                checked={checked}
+                onChange={update => onChange(id, update)}
+                onRemove={() => onRemove(id)}
+            />
         )
     });
     return (
-        <div>
-            <ul>
-                {itemsList}
-            </ul>
-        </div>
+        <Gapped
+            gap={5}
+            vertical={true}
+        >
+            {(itemsList.length == 0) ? (<i>Список пуст</i>) : itemsList}
+        </Gapped>
     )
 }
 

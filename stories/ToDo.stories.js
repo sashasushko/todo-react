@@ -7,12 +7,12 @@ import ToDo from '../src/js/components/ToDo';
 const items = [
     {
         id: 0,
-        value: 'Read "Clean Code"',
+        value: 'Сходить туда, не знаю куда',
         checked: true,
     },
     {
         id: 1,
-        value: 'Write clean code',
+        value: 'Принести то, не знаю что',
         checked: false,
     }
 ];
@@ -28,17 +28,17 @@ storiesOf('ToDo', module)
     ))
     .add('with placeholder', () => (
         <ToDo
-            placeholder='Write something'
+            placeholder='Нужно сделать...'
         />
     ))
     .add('with value for new item', () => (
         <ToDo
-            value='Read again'
+            value='Сходить туда, не знаю куда'
         />
     ))
     .add('with items and value for new item', () => (
         <ToDo
-            value='Read again'
+            value='А не то мой меч — твоя голова с плеч'
             items={items}
         />
     ));

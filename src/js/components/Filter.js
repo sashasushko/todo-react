@@ -2,34 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import Group from '../../../node_modules/retail-ui/components/Group/Group';
+import Button from '../../../node_modules/retail-ui/components/Button/Button';
+
 export default function Filter(props) {
-    const { onChange } = props;
+    const { filter, onChange } = props;
     return (
-        <fieldset>
-            <legend>Show</legend>
-            <label>
-                <input
-                    type='radio'
-                    name='filter'
-                    defaultChecked={true}
-                    onChange={() => onChange('all')}
-                />All
-            </label>
-            <label>
-                <input
-                    type='radio'
-                    name='filter'
-                    onChange={() => onChange('active')}
-                />Active
-            </label>
-            <label>
-                <input
-                    type='radio'
-                    name='filter'
-                    onChange={() => onChange('completed')}
-                />Completed
-            </label>
-        </fieldset>
+        <Group>
+            <Button
+                active={filter === 'all'}
+                onClick={() => onChange('all')}
+            >Все</Button>
+            <Button
+                active={filter === 'active'}
+                onClick={() => onChange('active')}
+            >Несделанные</Button>
+            <Button
+                active={filter === 'completed'}
+                onClick={() => onChange('completed')}
+            >Сделанные</Button>
+        </Group>
     )
 }
 
