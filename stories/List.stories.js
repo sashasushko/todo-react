@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import './../src/less/style.less';
-import List from '../src/js/components/List';
+import List from './../src/js/components/List';
 
 const items = [
     {

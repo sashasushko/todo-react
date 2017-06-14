@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import Group from '../../../node_modules/retail-ui/components/Group/Group';
-import Button from '../../../node_modules/retail-ui/components/Button/Button';
+import Group from 'retail-ui/components/Group/Group';
+import Button from 'retail-ui/components/Button/Button';
 
 export default function Filter(props) {
     const { filter, onChange } = props;

@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import Gapped from '../../../node_modules/retail-ui/components/Gapped/Gapped';
-import Checkbox from '../../../node_modules/retail-ui/components/Checkbox/Checkbox';
-import Input from '../../../node_modules/retail-ui/components/Input/Input';
-import Link from '../../../node_modules/retail-ui/components/Link/Link';
+import Gapped from 'retail-ui/components/Gapped/Gapped';
+import Checkbox from 'retail-ui/components/Checkbox/Checkbox';
+import Input from 'retail-ui/components/Input/Input';
+import Link from 'retail-ui/components/Link/Link';
 
 export default class Item extends React.Component {
     constructor(props) {
@@ -36,40 +36,47 @@ export default class Item extends React.Component {
             this.setState({ editable: false, value });
     }
 
-    render() {
-        const { checked, onChange, onRemove } = this.props;
+    renderInput() {
+        const { value } = this.state;
+
+        return (
+            <Input
+                type='text'
+                value={value}
+                autoFocus={true}
+                onChange={event => this.setState({ value: event.target.value })}
+                onBlur={() => this.updateItemValue()}
+                onKeyDown={event => this.handleInputKeyDown(event.key)}
+            />
+        );
+    }
+
+    renderText() {
         const { value, editable } = this.state;
 
         return (
-            <Gapped
-                gap={20}
-            >
+            <span
+                style={{ lineHeight: '34px' }}
+                width='auto'
+                onClick={() => this.setState({ editable: true })}
+            >{value}</span>
+        );
+    }
+
+    render() {
+        const { checked, onChange, onRemove } = this.props;
+        const { editable } = this.state;
+
+        return (
+            <Gapped gap={20}>
                 <div>
                     <Checkbox
                         checked={checked}
                         onChange={event => onChange({ checked: event.target.checked })}
                     />
-                    {
-                        !editable && (
-                            <span
-                                style={{ lineHeight: '34px' }}
-                                width='auto'
-                                onClick={() => this.setState({ editable: true })}
-                            >{value}</span>
-                        )
-                    }
-                    {
-                        editable && (
-                            <Input
-                                type='text'
-                                value={value}
-                                autoFocus={true}
-                                onChange={event => this.setState({ value: event.target.value })}
-                                onBlur={() => this.updateItemValue()}
-                                onKeyDown={event => this.handleInputKeyDown(event.key)}
-                            />
-                        )
-                    }
+                    {editable
+                        ? this.renderInput()
+                        : this.renderText()}
                 </div>
                 <Link
                     use='danger'

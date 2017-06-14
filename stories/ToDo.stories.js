@@ -2,7 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import ToDo from '../src/js/components/ToDo';
+import './../src/less/style.less';
+import ToDo from './../src/js/components/ToDo';
 
 const items = [
     {

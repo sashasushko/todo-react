@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import Gapped from '../../../node_modules/retail-ui/components/Gapped/Gapped';
-import Group from '../../../node_modules/retail-ui/components/Group/Group';
-import Checkbox from '../../../node_modules/retail-ui/components/Checkbox/Checkbox';
-import Input from '../../../node_modules/retail-ui/components/Input/Input';
-import Button from '../../../node_modules/retail-ui/components/Button/Button';
+import Gapped from 'retail-ui/components/Gapped/Gapped';
+import Group from 'retail-ui/components/Group/Group';
+import Checkbox from 'retail-ui/components/Checkbox/Checkbox';
+import Input from 'retail-ui/components/Input/Input';
+import Button from 'retail-ui/components/Button/Button';
 import List from './List';
 import Filter from './Filter';
 
