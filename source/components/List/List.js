@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
+import styles from "./List.less";
+
 import Gapped from "retail-ui/components/Gapped";
 import Item from "../Item";
 
@@ -9,7 +11,7 @@ export default function List(props) {
   const { items, onChange, onRemove } = props;
   return (
     <Gapped gap={5} vertical={true}>
-      {items.length === 0 && <i style={{ lineHeight: "34px" }}>Список пуст</i>}
+      {items.length === 0 && <i className={styles.noResults}>Список пуст</i>}
       {items.map(({ id, value, checked }) =>
         <Item
           key={id}
