@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
+import styles from "./Item.less";
+
 import Gapped from "retail-ui/components/Gapped";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
@@ -52,7 +54,7 @@ export default class Item extends React.Component {
 
     return (
       <span
-        style={{ lineHeight: "34px" }}
+        className={styles.label}
         width="auto"
         onClick={() => this.setState({ editable: true })}
       >
