@@ -2,8 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import Checkbox from './Checkbox';
-import Input from './Input';
+import Gapped from '../../../node_modules/retail-ui/components/Gapped/Gapped';
+import Group from '../../../node_modules/retail-ui/components/Group/Group';
+import Checkbox from '../../../node_modules/retail-ui/components/Checkbox/Checkbox';
+import Input from '../../../node_modules/retail-ui/components/Input/Input';
+import Button from '../../../node_modules/retail-ui/components/Button/Button';
 import List from './List';
 import Filter from './Filter';
 
@@ -18,16 +21,16 @@ export default class ToDo extends React.Component {
         }
     }
 
-    handleAllDoneChange(checked) {
+    handleAllDoneChange(event) {
         const { items } = this.state;
         const newItems = items.map(item => {
-            item.checked = checked;
+            item.checked = event.target.checked;
             return item;
         });
 
         this.setState({
             items: newItems,
-            allItemsChecked: checked
+            allItemsChecked: event.target.checked
         });
     }
 
@@ -99,9 +102,9 @@ export default class ToDo extends React.Component {
     filterItems() {
         const { filter, items } = this.state;
         const filters = {
-            all: i => true,
-            active: i => !i.checked,
-            completed: i => i.checked 
+            'all': i => true,
+            'active': i => !i.checked,
+            'completed': i => i.checked
         };
 
         return items.filter(filters[filter]);
@@ -112,48 +115,86 @@ export default class ToDo extends React.Component {
         const { placeholder } = this.props;
 
         return (
-            <div>
-                {
-                    (items.length != 0) && (
-                        <div>
-                            <Checkbox
-                                checked={items.every(x => x.checked)}
-                                label='All done'
-                                onChange={checked => this.handleAllDoneChange(checked)}
-                            />
+            <div
+                style={{ marginTop: '40px' }}
+            >
+                <Gapped
+                    gap={30}
+                    vertical={true}
+                >
+                    <Gapped
+                        gap={20}
+                        vertical={true}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                maxWidth: '580px',
+                                width: '100%'
+                            }}
+                        >
+                            <div
+                                style={{
+                                    flex: 'auto'
+                                }}
+                            >
+                                <Input
+                                    width='100%'
+                                    mainInGroup
+                                    value={value}
+                                    placeholder={placeholder}
+                                    onChange={event => this.setState({ value: event.target.value })}
+                                    onKeyDown={event => this.handleInputKeyDown(event.key)}
+                                />
+                            </div>
+                            {
+                                (items.length != 0) && (
+                                    <div
+                                        style={{
+                                            paddingTop: '5px',
+                                            paddingLeft: '20px'
+                                        }}
+                                    >
+                                        <Checkbox
+                                            checked={items.every(x => x.checked)}
+                                            onChange={checked => this.handleAllDoneChange(checked)}
+                                        >Всё сделано</Checkbox>
+                                    </div>
+                                )
+                            }
                         </div>
-                    )
-                }
-                <div>
-                    <Input
-                        value={value}
-                        placeholder={placeholder}
-                        onChange={value => this.setState({ value })}
-                        onKeyDown={key => this.handleInputKeyDown(key)}
-                    />
-                </div>
-                <List
-                    items={this.filterItems()}
-                    onChange={(index, update) => this.handleItemChange(index, update)}
-                    onRemove={index => this.handleItemRemove(index)}
-                />
-                {
-                    (items.length != 0) && (
-                        <div>Left: {items.filter(i => !i.checked).length}</div>
-                    )
-                }
-                {
-                    (items.length != 0) && (
-                        <Filter
-                            onChange={filter => this.setState({ filter })}
+                        <List
+                            items={this.filterItems()}
+                            onChange={(index, update) => this.handleItemChange(index, update)}
+                            onRemove={index => this.handleItemRemove(index)}
                         />
-                    )
-                }
-                {
-                    (items.filter(i => i.checked).length != 0) && (
-                        <button onClick={() => this.handleCompletedClear()}>Clear completed</button>
-                    )
-                }
+                    </Gapped>
+                    <Gapped
+                        gap={30}
+                    >
+                        {
+                            (items.length != 0) && (
+                                <div>Осталось: {items.filter(i => !i.checked).length}</div>
+                            )
+                        }
+                        {
+                            (items.length != 0) && (
+                                <Filter
+                                    filter={filter}
+                                    onChange={filter => this.setState({ filter })}
+                                />
+                            )
+                        }
+                        {
+                            (items.filter(i => i.checked).length != 0) && (
+                                <Button
+                                    use='danger'
+                                    onClick={() => this.handleCompletedClear()}
+                                >Удалить сделанные</Button>
+                            )
+                        }
+                    </Gapped>
+                </Gapped>
             </div>
         )
     }
@@ -167,7 +208,18 @@ ToDo.propTypes = {
 };
 
 ToDo.defaultProps = {
-    items: [],
+    items: [
+        {
+            checked: true,
+            value: 'Сходить туда, не знаю куда',
+            id: 1
+        },
+        {
+            checked: false,
+            value: 'Принести то, не знаю что',
+            id: 2
+        }
+    ],
     value: '',
     placeholder: '',
     filter: 'all'
