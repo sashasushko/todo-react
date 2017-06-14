@@ -1,104 +1,96 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import React from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
-import Gapped from 'retail-ui/components/Gapped/Gapped';
-import Checkbox from 'retail-ui/components/Checkbox/Checkbox';
-import Input from 'retail-ui/components/Input/Input';
-import Link from 'retail-ui/components/Link/Link';
+import Gapped from "retail-ui/components/Gapped/Gapped";
+import Checkbox from "retail-ui/components/Checkbox/Checkbox";
+import Input from "retail-ui/components/Input/Input";
+import Link from "retail-ui/components/Link/Link";
 
 export default class Item extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: props.value,
-            editable: props.editable
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.value,
+      editable: props.editable
+    };
+  }
 
-    updateItemValue() {
-        const { onChange, onRemove } = this.props;
-        const { value } = this.state;
+  updateItemValue() {
+    const { onChange, onRemove } = this.props;
+    const { value } = this.state;
 
-        if (value.trim())
-            onChange({ value: value.trim() });
-        else
-            onRemove();
-        this.setState({ editable: false });
-    }
+    if (value.trim()) onChange({ value: value.trim() });
+    else onRemove();
+    this.setState({ editable: false });
+  }
 
-    handleInputKeyDown(key) {
-        const { value } = this.props;
+  handleInputKeyDown(key) {
+    const { value } = this.props;
 
-        if (key === 'Enter')
-            this.updateItemValue();
-        if (key === 'Escape')
-            this.setState({ editable: false, value });
-    }
+    if (key === "Enter") this.updateItemValue();
+    if (key === "Escape") this.setState({ editable: false, value });
+  }
 
-    renderInput() {
-        const { value } = this.state;
+  renderInput() {
+    const { value } = this.state;
 
-        return (
-            <Input
-                type='text'
-                value={value}
-                autoFocus={true}
-                onChange={event => this.setState({ value: event.target.value })}
-                onBlur={() => this.updateItemValue()}
-                onKeyDown={event => this.handleInputKeyDown(event.key)}
-            />
-        );
-    }
+    return (
+      <Input
+        type="text"
+        value={value}
+        autoFocus={true}
+        onChange={event => this.setState({ value: event.target.value })}
+        onBlur={() => this.updateItemValue()}
+        onKeyDown={event => this.handleInputKeyDown(event.key)}
+      />
+    );
+  }
 
-    renderText() {
-        const { value, editable } = this.state;
+  renderText() {
+    const { value, editable } = this.state;
 
-        return (
-            <span
-                style={{ lineHeight: '34px' }}
-                width='auto'
-                onClick={() => this.setState({ editable: true })}
-            >{value}</span>
-        );
-    }
+    return (
+      <span
+        style={{ lineHeight: "34px" }}
+        width="auto"
+        onClick={() => this.setState({ editable: true })}
+      >
+        {value}
+      </span>
+    );
+  }
 
-    render() {
-        const { checked, onChange, onRemove } = this.props;
-        const { editable } = this.state;
+  render() {
+    const { checked, onChange, onRemove } = this.props;
+    const { editable } = this.state;
 
-        return (
-            <Gapped gap={20}>
-                <div>
-                    <Checkbox
-                        checked={checked}
-                        onChange={event => onChange({ checked: event.target.checked })}
-                    />
-                    {editable
-                        ? this.renderInput()
-                        : this.renderText()}
-                </div>
-                <Link
-                    use='danger'
-                    icon='remove'
-                    onClick={onRemove}
-                >Удалить</Link>
-            </Gapped>
-        )
-    }
+    return (
+      <Gapped gap={20}>
+        <div>
+          <Checkbox
+            checked={checked}
+            onChange={event => onChange({ checked: event.target.checked })}
+          />
+          {editable ? this.renderInput() : this.renderText()}
+        </div>
+        <Link use="danger" icon="remove" onClick={onRemove}>Удалить</Link>
+      </Gapped>
+    );
+  }
 }
 
 Item.propTypes = {
-    value: PropTypes.string.isRequired,
-    checked: PropTypes.bool,
-    editable: PropTypes.bool,
-    onChange: PropTypes.func,
-    onRemove: PropTypes.func
+  value: PropTypes.string.isRequired,
+  checked: PropTypes.bool,
+  editable: PropTypes.bool,
+  onChange: PropTypes.func,
+  onRemove: PropTypes.func
 };
 
 Item.defaultProps = {
-    checked: false,
-    editable: false,
-    onChange: () => { },
-    onRemove: () => { }
+  checked: false,
+  editable: false,
+  onChange: () => {},
+  onRemove: () => {}
 };
