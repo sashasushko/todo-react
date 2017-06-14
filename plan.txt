@@ -1,22 +1,22 @@
 - Async Api
-    - Save to localstorage
+  - Save to localstorage
 - Окрно поттверждения удаляения
 - Модальное окно с роутером
 - css modules
-    - classnames, classnames-loader
+  - classnames, classnames-loader
 
 
 - eslint
-    - CI
+  - CI
 - css modules
-    - ExtraxtTextPlugin
-    - подлючить stylelint
-    - CI
+  - ExtraxtTextPlugin
+  - подлючить stylelint
+  - CI
 
 - Build
-    - Научиться собирать в продакшен
-    - Hot Loader
-    - publish into gh-pages automatically
+  - Научиться собирать в продакшен
+  - Hot Loader
+  - publish into gh-pages automatically
 
 - Подключить flow
-    - настроить провеку на CI
+  - настроить провеку на CI
