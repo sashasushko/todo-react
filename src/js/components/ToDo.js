@@ -115,10 +115,14 @@ export default class ToDo extends React.Component {
         const { placeholder } = this.props;
 
         return (
-            <div>
-                <h1
-                    style={{ marginBottom: '40px' }}
-                >Список дел</h1>
+            <div style={{
+                maxWidth: '640px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                padding: '30px 40px 40px',
+                outline: '1px solid rgba(0,0,0,0.1)'
+            }}>
+                <h1 style={{ marginTop: 0, marginBottom: '40px' }}>Список дел</h1>
                 <Gapped
                     gap={30}
                     vertical={true}
