@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import Gapped from "retail-ui/components/Gapped/Gapped";
-import Item from "./Item";
+import Gapped from "retail-ui/components/Gapped";
+import Item from "../Item";
 
 export default function List(props) {
   const { items, onChange, onRemove } = props;

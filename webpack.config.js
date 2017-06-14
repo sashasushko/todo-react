@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-    entry: './src/js/App.js',
+    entry: './source/app.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js'
@@ -12,7 +12,7 @@ const config = {
             {
                 test: /\.(js|jsx)?$/,
                 loader: 'babel-loader',
-                include: /src|retail\-ui/
+                include: /source|retail\-ui/
             },
             {
                 test: /\.less$/,
@@ -21,7 +21,7 @@ const config = {
                     'css-loader',
                     'less-loader'
                 ],
-                include: /src|retail\-ui/
+                include: /source|retail\-ui/
             },
             {
                 test: /\.(png|woff|woff2|eot)$/,
@@ -37,7 +37,7 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html',
+            template: './source/index.html',
             inject: 'body',
             minify: {
                 collapseWhitespace: true

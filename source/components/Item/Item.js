@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import Gapped from "retail-ui/components/Gapped/Gapped";
-import Checkbox from "retail-ui/components/Checkbox/Checkbox";
-import Input from "retail-ui/components/Input/Input";
-import Link from "retail-ui/components/Link/Link";
+import Gapped from "retail-ui/components/Gapped";
+import Checkbox from "retail-ui/components/Checkbox";
+import Input from "retail-ui/components/Input";
+import Link from "retail-ui/components/Link";
 
 export default class Item extends React.Component {
   constructor(props) {

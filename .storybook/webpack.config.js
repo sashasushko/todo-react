@@ -6,7 +6,7 @@ const config = {
             {
                 test: /\.(js|jsx)?$/,
                 loader: 'babel-loader',
-                include: /src|retail\-ui/
+                include: /source|retail\-ui/
             },
             {
                 test: /\.less$/,
@@ -15,7 +15,7 @@ const config = {
                     'css-loader',
                     'less-loader'
                 ],
-                include: /src|retail\-ui/
+                include: /source|retail\-ui/
             },
             {
                 test: /\.(png|woff|woff2|eot)$/,

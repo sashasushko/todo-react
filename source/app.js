@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import "./../less/style.less";
-import ToDo from "./components/ToDo";
+import "./style.less";
+import Todo from "./components/Todo";
 
 ReactDOM.render(
-  <ToDo placeholder="Нужно сделать..." />,
+  <Todo />,
   document.getElementById("root")
 );

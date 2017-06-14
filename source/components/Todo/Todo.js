@@ -2,15 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import Gapped from "retail-ui/components/Gapped/Gapped";
-import Group from "retail-ui/components/Group/Group";
-import Checkbox from "retail-ui/components/Checkbox/Checkbox";
-import Input from "retail-ui/components/Input/Input";
-import Button from "retail-ui/components/Button/Button";
-import List from "./List";
-import Filter from "./Filter";
+import Gapped from "retail-ui/components/Gapped";
+import Checkbox from "retail-ui/components/Checkbox";
+import Input from "retail-ui/components/Input";
+import Button from "retail-ui/components/Button";
+import List from "../List";
+import Filter from "../Filter";
 
-export default class ToDo extends React.Component {
+export default class Todo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -138,7 +137,6 @@ export default class ToDo extends React.Component {
               >
                 <Input
                   width="100%"
-                  mainInGroup
                   value={value}
                   placeholder={placeholder}
                   onChange={event =>
@@ -187,16 +185,16 @@ export default class ToDo extends React.Component {
   }
 }
 
-ToDo.propTypes = {
+Todo.propTypes = {
   items: PropTypes.array,
   value: PropTypes.string,
   placeholder: PropTypes.string,
   filter: PropTypes.string
 };
 
-ToDo.defaultProps = {
+Todo.defaultProps = {
   items: [],
   value: "",
-  placeholder: "",
+  placeholder: "Нужно сделать...",
   filter: "all"
 };

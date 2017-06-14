@@ -2,8 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
-import "./../src/less/style.less";
-import Item from "./../src/js/components/Item";
+import Item from "./../components/Item";
 
 storiesOf("Item", module)
   .add("default", () =>
