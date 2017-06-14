@@ -115,9 +115,10 @@ export default class ToDo extends React.Component {
         const { placeholder } = this.props;
 
         return (
-            <div
-                style={{ marginTop: '40px' }}
-            >
+            <div>
+                <h1
+                    style={{ marginBottom: '40px' }}
+                >Список дел</h1>
                 <Gapped
                     gap={30}
                     vertical={true}
@@ -147,21 +148,22 @@ export default class ToDo extends React.Component {
                                     onKeyDown={event => this.handleInputKeyDown(event.key)}
                                 />
                             </div>
-                            {
-                                (items.length != 0) && (
-                                    <div
-                                        style={{
-                                            paddingTop: '5px',
-                                            paddingLeft: '20px'
-                                        }}
-                                    >
+                            <div
+                                style={{
+                                    paddingTop: '5px',
+                                    paddingLeft: '20px',
+                                    width: '110px'
+                                }}
+                            >
+                                {
+                                    (items.length != 0) && (
                                         <Checkbox
                                             checked={items.every(x => x.checked)}
                                             onChange={checked => this.handleAllDoneChange(checked)}
                                         >Всё сделано</Checkbox>
-                                    </div>
-                                )
-                            }
+                                    )
+                                }
+                            </div>
                         </div>
                         <List
                             items={this.filterItems()}
@@ -208,18 +210,7 @@ ToDo.propTypes = {
 };
 
 ToDo.defaultProps = {
-    items: [
-        {
-            checked: true,
-            value: 'Сходить туда, не знаю куда',
-            id: 1
-        },
-        {
-            checked: false,
-            value: 'Принести то, не знаю что',
-            id: 2
-        }
-    ],
+    items: [],
     value: '',
     placeholder: '',
     filter: 'all'
