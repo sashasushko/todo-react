@@ -27,8 +27,8 @@ export default class Item extends React.Component {
     const { itemId, itemValue } = localStorage;
     const { id } = this.props;
 
-    if (itemId == id && itemId) {
-      this.setState({ value: itemValue || "", editable: true });
+    if (itemId == id && itemId && itemValue) {
+      this.setState({ value: itemValue, editable: true });
     }
   }
 
