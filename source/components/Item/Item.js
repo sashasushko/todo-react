@@ -1,10 +1,14 @@
+import "babel-polyfill";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
 import styles from "./Item.less";
 
+import Modal from "retail-ui/components/Modal";
 import Gapped from "retail-ui/components/Gapped";
+import Button from "retail-ui/components/Button";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
 import Link from "retail-ui/components/Link";
@@ -14,7 +18,8 @@ export default class Item extends React.Component {
     super(props);
     this.state = {
       value: props.value,
-      editable: props.editable
+      editable: props.editable,
+      removeable: false
     };
   }
 
@@ -40,20 +45,33 @@ export default class Item extends React.Component {
     }
   }
 
-  updateItemValue() {
-    const { onChange, onRemove } = this.props;
+  handleItemValueUpdate() {
+    const { onChange } = this.props;
     const { value } = this.state;
 
-    if (value.trim()) onChange({ value: value.trim() });
-    else onRemove();
-    this.setState({ editable: false });
+    if (value.trim()) {
+      onChange({ value: value.trim() });
+      this.setState({ editable: false });
+    } else {
+      this.handleItemRemove();
+    }
   }
 
   handleInputKeyDown(key) {
     const { value } = this.props;
 
-    if (key === "Enter") this.updateItemValue();
+    if (key === "Enter") this.handleItemValueUpdate();
     if (key === "Escape") this.setState({ editable: false, value });
+  }
+
+  handleItemRestore() {
+    const { value } = this.props;
+
+    this.setState({ removeable: false, editable: false, value });
+  }
+
+  handleItemRemove() {
+    this.setState({ removeable: true });
   }
 
   renderInput() {
@@ -65,7 +83,7 @@ export default class Item extends React.Component {
         autoFocus={true}
         value={value}
         onChange={event => this.setState({ value: event.target.value })}
-        onBlur={() => this.updateItemValue()}
+        onBlur={() => this.handleItemValueUpdate()}
         onKeyDown={event => this.handleInputKeyDown(event.key)}
       />
     );
@@ -85,9 +103,31 @@ export default class Item extends React.Component {
     );
   }
 
+  renderModal() {
+    const { onRemove } = this.props;
+
+    return (
+      <Modal onClose={() => this.handleItemRestore()}>
+        <Modal.Body>
+          <p>После удаления пункт не восстановить. Удалить?</p>
+        </Modal.Body>
+        <Modal.Footer panel={true}>
+          <Gapped gap={30}>
+            <Button use="danger" onClick={onRemove}>
+              Да, удалите
+            </Button>
+            <Link onClick={() => this.handleItemRestore()}>
+              Не удаляйте
+            </Link>
+          </Gapped>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   render() {
-    const { checked, onChange, onRemove } = this.props;
-    const { editable } = this.state;
+    const { checked, onChange } = this.props;
+    const { editable, removeable } = this.state;
 
     return (
       <Gapped gap={20}>
@@ -98,7 +138,14 @@ export default class Item extends React.Component {
           />
           {editable ? this.renderInput() : this.renderText()}
         </div>
-        <Link use="danger" icon="remove" onClick={onRemove}>Удалить</Link>
+        <Link
+          use="danger"
+          icon="remove"
+          onClick={() => this.handleItemRemove()}
+        >
+          Удалить
+        </Link>
+        {removeable && this.renderModal()}
       </Gapped>
     );
   }
