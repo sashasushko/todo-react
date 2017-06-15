@@ -24,7 +24,7 @@ export default class Todo extends React.Component {
 
   componentDidMount() {
     const { todoValue: value, todoFilter: filter, todoItems } = localStorage;
-    const items = JSON.parse(todoItems);
+    const items = todoItems ? JSON.parse(todoItems) : todoItems;
     const propsItems = this.props.items;
 
     if (filter) this.setState({ filter });
