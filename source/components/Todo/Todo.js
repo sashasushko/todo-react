@@ -22,6 +22,25 @@ export default class Todo extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { todoValue: value, todoFilter: filter, todoItems } = localStorage;
+    const items = JSON.parse(todoItems);
+    const propsItems = this.props.items;
+
+    if (filter) this.setState({ filter });
+    if (value) this.setState({ value });
+    if (items && propsItems.length === 0)
+      this.setState({ items, idCounter: items.length });
+  }
+
+  componentDidUpdate() {
+    const { value, filter, items } = this.state;
+
+    localStorage.setItem("todoValue", value);
+    localStorage.setItem("todoItems", JSON.stringify(items));
+    localStorage.setItem("todoFilter", filter);
+  }
+
   handleAllDoneChange(event) {
     const { items } = this.state;
     const newItems = items.map(item => {
@@ -97,26 +116,7 @@ export default class Todo extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const { todoValue: value, todoFilter: filter, todoItems } = localStorage;
-    const items = JSON.parse(todoItems);
-    const propsItems = this.props.items;
-
-    if (filter) this.setState({ filter });
-    if (value) this.setState({ value });
-    if (items && propsItems.length === 0)
-      this.setState({ items, idCounter: items.length });
-  }
-
-  componentDidUpdate() {
-    const { value, filter, items } = this.state;
-
-    localStorage.setItem("todoValue", value);
-    localStorage.setItem("todoItems", JSON.stringify(items));
-    localStorage.setItem("todoFilter", filter);
-  }
-
-  filterItems() {
+  handleFilterItems() {
     const { filter, items } = this.state;
     const filters = {
       all: i => true,
@@ -127,55 +127,68 @@ export default class Todo extends React.Component {
     return items.filter(filters[filter]);
   }
 
-  render() {
-    const { items, value, filter } = this.state;
+  renderHeader() {
+    const { items, value } = this.state;
     const { placeholder } = this.props;
 
+    return (
+      <div className={styles.header}>
+        <div className={styles.input}>
+          <Input
+            width="100%"
+            value={value}
+            placeholder={placeholder}
+            onChange={event => this.setState({ value: event.target.value })}
+            onKeyDown={event => this.handleInputKeyDown(event.key)}
+          />
+        </div>
+        <div className={styles.checkAll}>
+          {items.length != 0 &&
+            <Checkbox
+              checked={items.every(x => x.checked)}
+              onChange={checked => this.handleAllDoneChange(checked)}
+            >
+              Всё сделано
+            </Checkbox>}
+        </div>
+      </div>
+    );
+  }
+
+  renderFooter() {
+    const { items, filter } = this.state;
+
+    return (
+      <Gapped gap={30}>
+        {items.length != 0 &&
+          <div>Осталось: {items.filter(i => !i.checked).length}</div>}
+        {items.length != 0 &&
+          <Filter
+            filter={filter}
+            onChange={filter => this.setState({ filter })}
+          />}
+        {items.filter(i => i.checked).length != 0 &&
+          <Button use="danger" onClick={() => this.handleCompletedClear()}>
+            Удалить сделанные
+          </Button>}
+      </Gapped>
+    );
+  }
+
+  render() {
     return (
       <div className={styles.container}>
         <h1 className={styles.title}>Список дел</h1>
         <Gapped gap={30} vertical={true}>
           <Gapped gap={20} vertical={true}>
-            <div className={styles.header}>
-              <div className={styles.input}>
-                <Input
-                  width="100%"
-                  value={value}
-                  placeholder={placeholder}
-                  onChange={event =>
-                    this.setState({ value: event.target.value })}
-                  onKeyDown={event => this.handleInputKeyDown(event.key)}
-                />
-              </div>
-              <div className={styles.checkAll}>
-                {items.length != 0 &&
-                  <Checkbox
-                    checked={items.every(x => x.checked)}
-                    onChange={checked => this.handleAllDoneChange(checked)}
-                  >
-                    Всё сделано
-                  </Checkbox>}
-              </div>
-            </div>
+            {this.renderHeader()}
             <List
-              items={this.filterItems()}
+              items={this.handleFilterItems()}
               onChange={(index, update) => this.handleItemChange(index, update)}
               onRemove={index => this.handleItemRemove(index)}
             />
           </Gapped>
-          <Gapped gap={30}>
-            {items.length != 0 &&
-              <div>Осталось: {items.filter(i => !i.checked).length}</div>}
-            {items.length != 0 &&
-              <Filter
-                filter={filter}
-                onChange={filter => this.setState({ filter })}
-              />}
-            {items.filter(i => i.checked).length != 0 &&
-              <Button use="danger" onClick={() => this.handleCompletedClear()}>
-                Удалить сделанные
-              </Button>}
-          </Gapped>
+          {this.renderFooter()}
         </Gapped>
       </div>
     );
