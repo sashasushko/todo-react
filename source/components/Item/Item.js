@@ -19,25 +19,25 @@ export default class Item extends React.Component {
   }
 
   componentDidMount() {
+    const { itemId, itemValue } = localStorage;
     const { id } = this.props;
-    const {
-      itemId: localId,
-      itemEditable: editable,
-      itemValue: value
-    } = localStorage;
-    const isEditable = id == localId && editable !== "false";
 
-    if (isEditable) this.setState({ editable: true });
-    if (value && value.trim()) this.setState({ value });
+    if (itemId == id && itemId) {
+      this.setState({ value: itemValue || "", editable: true });
+    }
   }
 
   componentDidUpdate() {
     const { id } = this.props;
     const { editable, value } = this.state;
 
-    localStorage.setItem("itemValue", value);
-    localStorage.setItem("itemId", id);
-    localStorage.setItem("itemEditable", editable);
+    if (editable) {
+      localStorage.setItem("itemValue", value);
+      localStorage.setItem("itemId", id);
+    } else {
+      localStorage.removeItem("itemValue");
+      localStorage.removeItem("itemId");
+    }
   }
 
   updateItemValue() {
