@@ -1,5 +1,5 @@
 - Async Api
-  - Save to localstorage
+  + Save to localstorage
 - Окрно поттверждения удаляения
 - Модальное окно с роутером
 + css modules

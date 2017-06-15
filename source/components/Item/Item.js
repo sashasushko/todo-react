@@ -18,6 +18,28 @@ export default class Item extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { id } = this.props;
+    const {
+      itemId: localId,
+      itemEditable: editable,
+      itemValue: value
+    } = localStorage;
+    const isEditable = id == localId && editable !== "false";
+
+    if (isEditable) this.setState({ editable: true });
+    if (value && value.trim()) this.setState({ value });
+  }
+
+  componentDidUpdate() {
+    const { id } = this.props;
+    const { editable, value } = this.state;
+
+    localStorage.setItem("itemValue", value);
+    localStorage.setItem("itemId", id);
+    localStorage.setItem("itemEditable", editable);
+  }
+
   updateItemValue() {
     const { onChange, onRemove } = this.props;
     const { value } = this.state;
@@ -40,8 +62,8 @@ export default class Item extends React.Component {
     return (
       <Input
         type="text"
-        value={value}
         autoFocus={true}
+        value={value}
         onChange={event => this.setState({ value: event.target.value })}
         onBlur={() => this.updateItemValue()}
         onKeyDown={event => this.handleInputKeyDown(event.key)}

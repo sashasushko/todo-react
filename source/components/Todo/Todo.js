@@ -97,8 +97,20 @@ export default class Todo extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const {
+      todoValue: value,
+      todoFilter: filter,
+      todoItems: items
+    } = localStorage;
+
+    if (filter) this.setState({ filter });
+    if (value && value.trim()) this.setState({ value });
+    if (items) this.setState({ items: JSON.parse(items) });
+  }
+
   componentDidUpdate() {
-    const { value, items, filter } = this.state;
+    const { value, filter, items } = this.state;
 
     localStorage.setItem("todoValue", value);
     localStorage.setItem("todoItems", JSON.stringify(items));
@@ -179,8 +191,8 @@ Todo.propTypes = {
 };
 
 Todo.defaultProps = {
-  items: JSON.parse(localStorage.getItem("todoItems")) || [],
-  value: localStorage.getItem("todoValue") || "",
+  items: [],
+  value: "",
   placeholder: "Нужно сделать...",
-  filter: localStorage.getItem("todoFilter") || "all"
+  filter: "all"
 };
