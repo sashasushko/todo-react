@@ -15,6 +15,7 @@ export default function List(props) {
       {items.map(({ id, value, checked }) =>
         <Item
           key={id}
+          id={id}
           value={value}
           checked={checked}
           onChange={update => onChange(id, update)}
