@@ -17,6 +17,7 @@ const config = {
             {
                 test: /\.less$/,
                 loaders: [
+                    'classnames-loader',
                     'style-loader',
                     'css-loader',
                     'less-loader'
