@@ -23,13 +23,12 @@ export default class Todo extends React.Component {
   }
 
   componentDidMount() {
-    const { todoValue: value, todoFilter: filter, todoItems } = localStorage;
+    const { todoValue, todoFilter, todoItems } = localStorage;
     const items = todoItems ? JSON.parse(todoItems) : todoItems;
-    const propsItems = this.props.items;
 
-    if (filter) this.setState({ filter });
-    if (value) this.setState({ value });
-    if (items && propsItems.length === 0)
+    if (todoFilter) this.setState({ filter: todoFilter });
+    if (todoValue) this.setState({ value: todoValue });
+    if (items && this.props.items.length === 0)
       this.setState({ items, idCounter: items.length });
   }
 
@@ -42,14 +41,13 @@ export default class Todo extends React.Component {
   }
 
   handleAllDoneChange(event) {
-    const { items } = this.state;
-    const newItems = items.map(item => {
+    const items = this.state.items.map(item => {
       item.checked = event.target.checked;
       return item;
     });
 
     this.setState({
-      items: newItems,
+      items,
       allItemsChecked: event.target.checked
     });
   }
@@ -104,12 +102,12 @@ export default class Todo extends React.Component {
     const { items } = this.state;
 
     this.setState({
-      items: items.filter(i => !i.checked)
+      items: items.filter(item => !item.checked)
     });
   }
 
   handleInputKeyDown(key) {
-    const { value, items } = this.state;
+    const { value } = this.state;
 
     if (key === "Enter" && value.trim()) {
       this.handleItemAdd(value.trim());
@@ -161,13 +159,13 @@ export default class Todo extends React.Component {
     return (
       <Gapped gap={30}>
         {items.length != 0 &&
-          <div>Осталось: {items.filter(i => !i.checked).length}</div>}
+          <div>Осталось: {items.filter(item => !item.checked).length}</div>}
         {items.length != 0 &&
           <Filter
             filter={filter}
             onChange={filter => this.setState({ filter })}
           />}
-        {items.filter(i => i.checked).length != 0 &&
+        {items.filter(item => item.checked).length != 0 &&
           <Button use="danger" onClick={() => this.handleCompletedClear()}>
             Удалить сделанные
           </Button>}
