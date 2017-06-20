@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const config = {
     entry: './source/app.js',
     output: {
+        publicPath: '/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js'
     },
@@ -48,7 +49,8 @@ const config = {
     devServer: {
         contentBase: path.join(__dirname, "dist"),
         port: 9000,
-        overlay: true
+        overlay: true,
+        historyApiFallback: true
     }
 };
 

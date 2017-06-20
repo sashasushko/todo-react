@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
+import { BrowserRouter } from "react-router-dom";
 
 import "./style.less";
 import Todo from "./components/Todo";
 
 ReactDOM.render(
-  <Todo />,
+  <BrowserRouter>
+    <Todo />
+  </BrowserRouter>,
   document.getElementById("root")
 );
