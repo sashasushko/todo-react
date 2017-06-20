@@ -75,8 +75,8 @@ export default class Item extends React.Component {
   }
 
   renderText() {
-    const { value, editable } = this.state;
-    const { id } = this.props;
+    const { editable } = this.state;
+    const { id, value } = this.props;
     const url = "/edit/" + id;
 
     return <Link className={styles.label} to={url}>{value}</Link>;
@@ -113,7 +113,6 @@ export default class Item extends React.Component {
         onClose={() => {
           this.handleItemRestore();
           history.push("/");
-          return false;
         }}
       >
         <Modal.Header>
