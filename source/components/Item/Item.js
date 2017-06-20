@@ -1,5 +1,3 @@
-import "babel-polyfill";
-
 import React from "react";
 import PropTypes from "prop-types";
 import { Route, Link } from "react-router-dom";
@@ -77,9 +75,8 @@ export default class Item extends React.Component {
   renderText() {
     const { editable } = this.state;
     const { id, value } = this.props;
-    const url = "/edit/" + id;
 
-    return <Link className={styles.label} to={url}>{value}</Link>;
+    return <Link className={styles.label} to={"/edit/" + id}>{value}</Link>;
   }
 
   renderModal() {
@@ -146,7 +143,6 @@ export default class Item extends React.Component {
   render() {
     const { id, checked, onChange } = this.props;
     const { editable, removeable } = this.state;
-    const url = "/edit/" + id;
 
     return (
       <Gapped gap={20}>
@@ -165,7 +161,7 @@ export default class Item extends React.Component {
           Удалить
         </LinkUI>
         {removeable && this.renderModal()}
-        <Route path={url} render={props => this.renderEdit(props)} />
+        <Route path={"/edit/" + id} render={props => this.renderEdit(props)} />
       </Gapped>
     );
   }

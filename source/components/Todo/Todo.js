@@ -27,7 +27,7 @@ export default class Todo extends React.Component {
 
     if (todoFilter) this.setState({ filter: todoFilter });
     if (todoValue) this.setState({ value: todoValue });
-    if (items.length > 0 && this.props.items.length === 0) {
+    if (items && items.length > 0 && this.props.items.length === 0) {
       const idCounter = items[items.length - 1]["id"];
       this.setState({ items, idCounter });
     }

@@ -1,2 +1,2 @@
 import Item from './Item';
-module.exports = Item;
+export default Item;
