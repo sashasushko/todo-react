@@ -1,2 +1,2 @@
 import List from './List';
-module.exports = List;
+export default List;
