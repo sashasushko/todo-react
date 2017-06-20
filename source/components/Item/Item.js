@@ -1,8 +1,8 @@
 import "babel-polyfill";
 
 import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import { Route, Link } from "react-router-dom";
 
 import styles from "./Item.less";
 
@@ -11,7 +11,7 @@ import Gapped from "retail-ui/components/Gapped";
 import Button from "retail-ui/components/Button";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
-import Link from "retail-ui/components/Link";
+import LinkUI from "retail-ui/components/Link";
 
 export default class Item extends React.Component {
   constructor(props) {
@@ -74,33 +74,12 @@ export default class Item extends React.Component {
     this.setState({ removeable: true });
   }
 
-  renderInput() {
-    const { value } = this.state;
-
-    return (
-      <Input
-        type="text"
-        autoFocus={true}
-        value={value}
-        onChange={event => this.setState({ value: event.target.value })}
-        onBlur={() => this.handleItemValueUpdate()}
-        onKeyDown={event => this.handleInputKeyDown(event.key)}
-      />
-    );
-  }
-
   renderText() {
     const { value, editable } = this.state;
+    const { id } = this.props;
+    const url = "/edit/" + id;
 
-    return (
-      <span
-        className={styles.label}
-        width="auto"
-        onClick={() => this.setState({ editable: true })}
-      >
-        {value}
-      </span>
-    );
+    return <Link className={styles.label} to={url}>{value}</Link>;
   }
 
   renderModal() {
@@ -116,9 +95,49 @@ export default class Item extends React.Component {
             <Button use="danger" onClick={onRemove}>
               Да, удалите
             </Button>
-            <Link onClick={() => this.handleItemRestore()}>
+            <LinkUI onClick={() => this.handleItemRestore()}>
               Не удаляйте
-            </Link>
+            </LinkUI>
+          </Gapped>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  renderEdit(props) {
+    const { value } = this.state;
+    const { history } = props;
+
+    return (
+      <Modal
+        onClose={() => {
+          this.handleItemRestore();
+          history.push("/");
+          return false;
+        }}
+      >
+        <Modal.Header>
+          Редактирование
+        </Modal.Header>
+        <Modal.Body>
+          <Input
+            type="text"
+            autoFocus={true}
+            value={value}
+            onChange={event => this.setState({ value: event.target.value })}
+          />
+        </Modal.Body>
+        <Modal.Footer panel={true}>
+          <Gapped gap={30}>
+            <Button
+              use="primary"
+              onClick={() => {
+                this.handleItemValueUpdate();
+                history.push("/");
+              }}
+            >
+              Изменить
+            </Button>
           </Gapped>
         </Modal.Footer>
       </Modal>
@@ -126,8 +145,9 @@ export default class Item extends React.Component {
   }
 
   render() {
-    const { checked, onChange } = this.props;
+    const { id, checked, onChange } = this.props;
     const { editable, removeable } = this.state;
+    const url = "/edit/" + id;
 
     return (
       <Gapped gap={20}>
@@ -136,16 +156,17 @@ export default class Item extends React.Component {
             checked={checked}
             onChange={event => onChange({ checked: event.target.checked })}
           />
-          {editable ? this.renderInput() : this.renderText()}
+          {this.renderText()}
         </div>
-        <Link
+        <LinkUI
           use="danger"
           icon="remove"
           onClick={() => this.handleItemRemove()}
         >
           Удалить
-        </Link>
+        </LinkUI>
         {removeable && this.renderModal()}
+        <Route path={url} render={props => this.renderEdit(props)} />
       </Gapped>
     );
   }

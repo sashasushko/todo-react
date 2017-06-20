@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
 import styles from "./Todo.less";
@@ -28,8 +27,10 @@ export default class Todo extends React.Component {
 
     if (todoFilter) this.setState({ filter: todoFilter });
     if (todoValue) this.setState({ value: todoValue });
-    if (items && this.props.items.length === 0)
-      this.setState({ items, idCounter: items.length });
+    if (items.length > 0 && this.props.items.length === 0) {
+      const idCounter = items[items.length - 1]["id"];
+      this.setState({ items, idCounter });
+    }
   }
 
   componentDidUpdate() {
