@@ -1,4 +1,4 @@
-- Async Api
++ Async Api
   + Save to localstorage
 + Окрно поттверждения удаляения
 + Модальное окно с роутером
@@ -14,7 +14,7 @@
 
 - Build
   - Научиться собирать в продакшен
-  - Hot Loader
+  + Hot Loader
   - publish into gh-pages automatically
 
 - Подключить flow

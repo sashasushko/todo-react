@@ -4,8 +4,7 @@
   "description": "Test React App",
   "main": "index.html",
   "scripts": {
-    "build": "webpack",
-    "serve": "webpack-dev-server",
+    "dev": "webpack-dev-server --open --hot --history-api-fallback --content-base dist/ --port 9000",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "repository": {

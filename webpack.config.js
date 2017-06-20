@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const config = {
-  entry: ["babel-polyfill", "./source/app.js"],
+  entry: ["babel-polyfill", "react-hot-loader/patch", "./src/app.js"],
   output: {
     publicPath: "/",
     path: path.resolve(__dirname, "dist"),
@@ -23,9 +23,10 @@ const config = {
             ],
             "stage-0",
             "react"
-          ]
+          ],
+          plugins: ["react-hot-loader/babel"]
         },
-        include: /source/
+        include: /src/
       },
       {
         test: /\.(js|jsx)?$/,
@@ -43,7 +44,7 @@ const config = {
           "css-loader",
           "less-loader"
         ],
-        include: /source|retail\-ui/
+        include: /src|retail\-ui/
       },
       {
         test: /\.(png|woff|woff2|eot)$/,
@@ -56,19 +57,13 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./source/index.html",
+      template: "./src/index.html",
       inject: "body",
       minify: {
         collapseWhitespace: true
       }
     })
-  ],
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    port: 9000,
-    overlay: true,
-    historyApiFallback: true
-  }
+  ]
 };
 
 module.exports = config;
