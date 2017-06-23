@@ -18,27 +18,25 @@ type DefaultProps = {
   onRemove: () => void
 };
 
-type Props = {
+type Props = {|
   id: number,
   value: string,
   removable: boolean,
   checked: boolean,
   onChange: (checked: boolean) => void,
   onRemove: () => void
-};
+|};
 
 type State = {
   removable: boolean
 };
 
-export default class Item extends React.Component<DefaultProps, Props, State> {
-  state = { removable: false };
+export default class Item extends React.Component {
+  props: Props;
+  state: State = { removable: false };
 
   static defaultProps = {
-    removable: false,
-    checked: false,
-    onChange: () => {},
-    onRemove: () => {}
+    removable: false
   };
 
   // ???
@@ -97,7 +95,6 @@ export default class Item extends React.Component<DefaultProps, Props, State> {
             {value}
           </RouterLink>
         </div>
-        {/* ??? */}
         <Link
           use="danger"
           icon="remove"

@@ -8,7 +8,7 @@ import Button from "retail-ui/components/Button";
 
 type Props = {
   filter: string,
-  onChange: (filter: string) => void
+  onChange: (filter: "all" | "active" | "completed") => void
 };
 
 export default function Filter(props: Props) {

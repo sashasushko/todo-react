@@ -6,12 +6,6 @@ import Modal from "retail-ui/components/Modal";
 import Input from "retail-ui/components/Input";
 import Button from "retail-ui/components/Button";
 
-type DefaultProps = {
-  onClose: () => void,
-  onSubmit: () => void
-  // ??? ------ ^
-};
-
 type Props = {
   value: string,
   onClose: () => void,
@@ -23,12 +17,12 @@ type State = {
 };
 
 export default class EditingModal extends React.Component {
+  props: Props;
   state: State;
-
-  static defaultProps: DefaultProps = {
+  static defaultProps = {
     value: "",
-    onClose: () => { },
-    onSubmit: () => { }
+    onClose: () => {},
+    onSubmit: (value: string) => {}
   };
 
   constructor(props: Props) {
@@ -51,12 +45,12 @@ export default class EditingModal extends React.Component {
             value={value}
             onChange={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
-                this.setState({ value: event.target.value })
+                this.setState({ value: event.target.value });
               }
             }}
             onKeyDown={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
-                event.key === "Enter" ? onSubmit(value) : false
+                event.key === "Enter" ? onSubmit(value) : false;
               }
             }}
           />

@@ -1,3 +1,4 @@
+// @flow
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -12,7 +13,7 @@ storiesOf("Item", module)
       id={0}
       value="Сходи туда, не знаю куда"
       onChange={action("onChange")}
-      onEditRequest={action("onEditRequest")}
+      checked={false}
       onRemove={action("onRemove")}
     />
   )
@@ -22,7 +23,6 @@ storiesOf("Item", module)
       value="Сходи туда, не знаю куда"
       checked={true}
       onChange={action("onChange")}
-      onEditRequest={action("onEditRequest")}
       onRemove={action("onRemove")}
     />
   );

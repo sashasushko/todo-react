@@ -13,18 +13,22 @@ import Button from "retail-ui/components/Button";
 import EditingModal from "./../EditingModal/EditingModal";
 import ItemsList from "./../ItemsList/ItemsList";
 import Filter from "./../Filter/Filter";
+import type { ItemType } from "../../domain/Item";
 
-type Props = {};
+type Props = {||};
+
+type FilterType = "all" | "active" | "completed";
 
 type State = {
   increment: number,
-  items: Array<Object>,
-  filter: string,
+  items: ItemType[],
+  filter: FilterType,
   value: string,
   editingValue: string
 };
 
 export default class Todo extends React.Component {
+  props: Props;
   state: State;
 
   constructor(props: Props) {
@@ -123,12 +127,12 @@ export default class Todo extends React.Component {
             placeholder="Например: Сходить, куда глаза глядят"
             onChange={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
-                this.setState({ value: event.target.value })
+                this.setState({ value: event.target.value });
               }
             }}
             onKeyDown={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
-                event.key === "Enter" ? this.handleAddItem() : false
+                event.key === "Enter" ? this.handleAddItem() : false;
               }
             }}
           />
@@ -139,7 +143,7 @@ export default class Todo extends React.Component {
               checked={items.every(i => i.checked)}
               onChange={(event: Event) => {
                 if (event.target instanceof HTMLInputElement) {
-                  this.handleCheckAll(event.target.checked)
+                  this.handleCheckAll(event.target.checked);
                 }
               }}
             >
