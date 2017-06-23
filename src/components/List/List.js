@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import styles from "./List.less";
 
 import Gapped from "retail-ui/components/Gapped";
-import Item from "../Item";
+import Item from "../Item/Item";
 
 export default function List(props) {
   const { items, onChange, onRemove } = props;
