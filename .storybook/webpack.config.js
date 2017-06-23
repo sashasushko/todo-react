@@ -1,34 +1,30 @@
-const path = require('path');
+const path = require("path");
 
 const config = {
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)?$/,
-                loader: 'babel-loader',
-                include: /source|retail\-ui/
-            },
-            {
-                test: /\.less$/,
-                loaders: [
-                    'style-loader',
-                    'css-loader',
-                    'less-loader'
-                ],
-                include: /source|retail\-ui/
-            },
-            {
-                test: /\.(png|woff|woff2|eot)$/,
-                loader: "file-loader"
-            }
-        ]
-    },
-    resolve: {
-        modules: [
-            'node_modules',
-            'web_modules'
-        ]
-    }
-}
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)?$/,
+        loader: "babel-loader",
+        include: /src|retail\-ui/,
+        options: {
+          presets: ["env", "stage-0", "react"]
+        }
+      },
+      {
+        test: /\.less$/,
+        loaders: ["style-loader", "css-loader", "less-loader"],
+        include: /src|retail\-ui/
+      },
+      {
+        test: /\.(png|woff|woff2|eot)$/,
+        loader: "file-loader"
+      }
+    ]
+  },
+  resolve: {
+    modules: ["node_modules", "web_modules"]
+  }
+};
 
 module.exports = config;

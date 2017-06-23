@@ -1,6 +1,6 @@
-+ Async Api
+- Async Api
   + Save to localstorage
-+ Окрно поттверждения удаляения
++ Окно подтверждения удаления
 + Модальное окно с роутером
 + css modules
     + classnames, classnames-loader

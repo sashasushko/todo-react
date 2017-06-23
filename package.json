@@ -1,10 +1,10 @@
 {
   "name": "todoapp",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "description": "Test React App",
   "main": "index.html",
   "scripts": {
-    "dev": "webpack-dev-server --open --hot --history-api-fallback --content-base dist/ --port 9000",
+    "dev": "webpack-dev-server --hot --history-api-fallback --content-base dist/ --port 9000",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "repository": {
@@ -37,6 +37,7 @@
     "react-hot-loader": "next",
     "react-router-dom": "^4.1.1",
     "retail-ui": "^0.7.6",
+    "storybook-router": "^0.2.7",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
     "webpack": "^2.6.1",

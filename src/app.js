@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AppContainer } from "react-hot-loader";
 
 import "./style.less";
+
 import Todo from "./components/Todo";
 
 const render = Component => {
