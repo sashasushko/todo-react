@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
-import List from "./../components/List";
+import List from "./../components/List/List";
 
 const items = [
   {

@@ -8,9 +8,9 @@ import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
 import Button from "retail-ui/components/Button";
 
-import EditingModal from "./../EditingModal";
-import ItemsList from "./../ItemsList";
-import Filter from "./../Filter";
+import EditingModal from "./../EditingModal/EditingModal";
+import ItemsList from "./../ItemsList/ItemsList";
+import Filter from "./../Filter/Filter";
 
 export default class Todo extends React.Component {
   constructor(props) {
@@ -83,7 +83,7 @@ export default class Todo extends React.Component {
   handleCheckAll(checked) {
     const items = this.state.items.map(i => ({
       ...i,
-      checked: checked,
+      checked: checked
     }));
 
     this.setState({ items });

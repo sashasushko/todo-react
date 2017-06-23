@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
 import "./../style.less";
-import Todo from "./../components/Todo";
+import Todo from "./../components/Todo/Todo";
 
 const items = [
   {

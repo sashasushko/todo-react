@@ -5,7 +5,7 @@ import { AppContainer } from "react-hot-loader";
 
 import "./style.less";
 
-import Todo from "./components/Todo";
+import Todo from "./components/Todo/Todo";
 
 const render = Component => {
   ReactDOM.render(
@@ -21,7 +21,7 @@ const render = Component => {
 render(Todo);
 
 if (module.hot) {
-  module.hot.accept("./components/Todo", () => {
+  module.hot.accept("./components/Todo/Todo", () => {
     render(Todo);
   });
 }

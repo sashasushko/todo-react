@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import StoryRouter from "storybook-router";
 
-import Item from "./../components/Item";
+import Item from "./../components/Item/Item";
 
 storiesOf("Item", module)
   .addDecorator(StoryRouter())
