@@ -25,14 +25,14 @@ storiesOf("Item", module)
       onEditRequest={action("onEditRequest")}
       onRemove={action("onRemove")}
     />
-  )
-  .add("removable", () =>
-    <Item
-      id={0}
-      value="Сходи туда, не знаю куда"
-      removable={true}
-      onChange={action("onChange")}
-      onEditRequest={action("onEditRequest")}
-      onRemove={action("onRemove")}
-    />
   );
+// .add("removable", () =>
+//   <Item
+//     id={0}
+//     value="Сходи туда, не знаю куда"
+//     removable={true}
+//     onChange={action("onChange")}
+//     onEditRequest={action("onEditRequest")}
+//     onRemove={action("onRemove")}
+//   />
+// );

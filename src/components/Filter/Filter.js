@@ -1,10 +1,17 @@
+// @flow
+
 import React from "react";
 import PropTypes from "prop-types";
 
 import Group from "retail-ui/components/Group";
 import Button from "retail-ui/components/Button";
 
-export default function Filter(props) {
+type Props = {
+  filter: string,
+  onChange: (filter: string) => void
+};
+
+export default function Filter(props: Props) {
   const { filter, onChange } = props;
   return (
     <Group>
@@ -23,10 +30,6 @@ export default function Filter(props) {
     </Group>
   );
 }
-
-Filter.propTypes = {
-  onChange: PropTypes.func
-};
 
 Filter.defaultProps = {
   onChange: () => {}

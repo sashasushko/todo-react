@@ -15,6 +15,7 @@ const config = {
         loader: "babel-loader",
         options: {
           presets: [
+            "flow",
             [
               "env",
               {

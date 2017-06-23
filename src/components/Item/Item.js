@@ -1,6 +1,7 @@
+// @flow
+
 import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import styles from "./Item.less";
 
@@ -8,20 +9,48 @@ import Gapped from "retail-ui/components/Gapped";
 import Modal from "retail-ui/components/Modal";
 import Checkbox from "retail-ui/components/Checkbox";
 import Button from "retail-ui/components/Button";
-import LinkUI from "retail-ui/components/Link";
+import Link from "retail-ui/components/Link";
 
-export default class Item extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      removable: props.removable
-    };
-  }
+type DefaultProps = {
+  removable: boolean,
+  checked: boolean,
+  onChange: () => void,
+  onRemove: () => void
+};
+
+type Props = {
+  id: number,
+  value: string,
+  removable: boolean,
+  checked: boolean,
+  onChange: (checked: boolean) => void,
+  onRemove: () => void
+};
+
+type State = {
+  removable: boolean
+};
+
+export default class Item extends React.Component<DefaultProps, Props, State> {
+  state = { removable: false };
+
+  static defaultProps = {
+    removable: false,
+    checked: false,
+    onChange: () => {},
+    onRemove: () => {}
+  };
+
+  // ???
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({ removable: nextProps.removable });
+  // }
 
   renderRemoveModal() {
     const { onRemove } = this.props;
 
     return (
+      // ???
       <Modal onClose={() => this.setState({ removable: false })}>
         <Modal.Body>
           <p>Удаленный пункт не&nbsp;восстановить. Вы&nbsp;уверены?</p>
@@ -56,34 +85,28 @@ export default class Item extends React.Component {
     return (
       <Gapped gap={20}>
         <div>
-          <Checkbox checked={checked} onChange={event => onChange(event)} />
-          <Link className={styles.link} to={"/edit/" + id}>{value}</Link>
+          <Checkbox
+            checked={checked}
+            onChange={(event: Event) => {
+              if (event.target instanceof HTMLInputElement) {
+                onChange(event.target.checked);
+              }
+            }}
+          />
+          <RouterLink className={styles.link} to={"/edit/" + id}>
+            {value}
+          </RouterLink>
         </div>
-        <LinkUI
+        {/* ??? */}
+        <Link
           use="danger"
           icon="remove"
           onClick={() => this.setState({ removable: true })}
         >
           Удалить
-        </LinkUI>
+        </Link>
         {removable && this.renderRemoveModal()}
       </Gapped>
     );
   }
 }
-
-Item.propTypes = {
-  id: PropTypes.number.isRequired,
-  value: PropTypes.string.isRequired,
-  removable: PropTypes.bool,
-  checked: PropTypes.bool,
-  onChange: PropTypes.func,
-  onRemove: PropTypes.func
-};
-
-Item.defaultProps = {
-  removable: false,
-  checked: false,
-  onChange: () => {},
-  onRemove: () => {}
-};

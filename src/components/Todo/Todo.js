@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react";
 import { Route } from "react-router-dom";
 
@@ -12,8 +14,20 @@ import EditingModal from "./../EditingModal/EditingModal";
 import ItemsList from "./../ItemsList/ItemsList";
 import Filter from "./../Filter/Filter";
 
+type Props = {};
+
+type State = {
+  increment: number,
+  items: Array<Object>,
+  filter: string,
+  value: string,
+  editingValue: string
+};
+
 export default class Todo extends React.Component {
-  constructor(props) {
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       increment: 0,
@@ -39,7 +53,7 @@ export default class Todo extends React.Component {
     });
   }
 
-  handleUpdateItem(id, update) {
+  handleUpdateItem(id: number, update: Object) {
     const { items } = this.state;
     const index = items.findIndex(item => item.id == id);
 
@@ -56,7 +70,7 @@ export default class Todo extends React.Component {
     });
   }
 
-  handleRemoveItem(id) {
+  handleRemoveItem(id: number) {
     const { items } = this.state;
     const index = items.findIndex(i => i.id === id);
 
@@ -80,7 +94,7 @@ export default class Todo extends React.Component {
     return items.filter(filters[filter]);
   }
 
-  handleCheckAll(checked) {
+  handleCheckAll(checked: boolean) {
     const items = this.state.items.map(i => ({
       ...i,
       checked: checked
@@ -107,16 +121,27 @@ export default class Todo extends React.Component {
             width="100%"
             value={value}
             placeholder="Например: Сходить, куда глаза глядят"
-            onChange={event => this.setState({ value: event.target.value })}
-            onKeyDown={event =>
-              event.key === "Enter" ? this.handleAddItem() : false}
+            onChange={(event: Event) => {
+              if (event.target instanceof HTMLInputElement) {
+                this.setState({ value: event.target.value })
+              }
+            }}
+            onKeyDown={(event: Event) => {
+              if (event.target instanceof HTMLInputElement) {
+                event.key === "Enter" ? this.handleAddItem() : false
+              }
+            }}
           />
         </div>
         <div className={styles.checkAll}>
           {items.length != 0 &&
             <Checkbox
               checked={items.every(i => i.checked)}
-              onChange={event => this.handleCheckAll(event.target.checked)}
+              onChange={(event: Event) => {
+                if (event.target instanceof HTMLInputElement) {
+                  this.handleCheckAll(event.target.checked)
+                }
+              }}
             >
               Всё сделано
             </Checkbox>}
@@ -146,7 +171,8 @@ export default class Todo extends React.Component {
     );
   }
 
-  renderEditingModal(props) {
+  // ----------------------- ???
+  renderEditingModal(props: Object) {
     const { items } = this.state;
     const { match, history } = props;
     const id = Number(match.params.id);
@@ -162,7 +188,7 @@ export default class Todo extends React.Component {
       <EditingModal
         value={value}
         onClose={() => history.push("/")}
-        onSubmit={value => {
+        onSubmit={(value: string) => {
           if (value.trim()) {
             this.handleUpdateItem(id, { value: value.trim() });
           } else {
