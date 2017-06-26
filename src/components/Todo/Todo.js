@@ -1,53 +1,41 @@
 // @flow
-
 import React from "react";
 import { Route } from "react-router-dom";
-
 import styles from "./Todo.less";
-
 import Loader from "retail-ui/components/Loader";
 import Gapped from "retail-ui/components/Gapped";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
 import Button from "retail-ui/components/Button";
-
 import EditingModal from "./../EditingModal/EditingModal";
 import ItemsList from "./../ItemsList/ItemsList";
 import Filter from "./../Filter/Filter";
 import type { ItemType } from "./../../domain/Item";
+import type { FilterType } from "./../../domain/Filter";
 import type { IItemsApi } from "./../../api/api";
 
 type Props = {|
   api: IItemsApi
 |};
 
-type FilterType = "all" | "active" | "completed";
-
-type State = {
+type State = {|
   items: ItemType[],
   filter: FilterType,
   newItemValue: string,
   loading: boolean
-};
+|};
 
 export default class Todo extends React.Component {
   props: Props;
-  state: State;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      items: [],
-      filter: "all",
-      newItemValue: "",
-      loading: true
-    };
-  }
+  state: State = {
+    items: [],
+    filter: "all",
+    newItemValue: "",
+    loading: true
+  };
 
   async getData(): Promise<void> {
-    const { getItems } = this.props.api;
-    const items = await getItems();
-
+    const items = await this.props.api.getItems();
     this.setState({ items, loading: false });
   }
 
@@ -55,68 +43,58 @@ export default class Todo extends React.Component {
     this.getData();
   }
 
-  async handleAddItem(): Promise<void> {
-    this.setState({ loading: true }); // ??? смешивание
-
-    const { newItemValue, items } = this.state;
-    const { addItem } = this.props.api;
-    const newItemId: number = await addItem({
-      checked: false,
-      value: newItemValue
-    });
-    const item: ItemType = {
-      id: newItemId,
-      checked: false,
-      value: newItemValue
-    };
-
+  async sendItem(data: $Shape<ItemType>): Promise<void> {
+    const { items } = this.state;
+    const id = await this.props.api.addItem(data);
     this.setState({
-      items: [...items, item],
-      newItemValue: "",
-      loading: false
+      items: [...items, { ...data, id }],
+      loading: false,
+      newItemValue: ""
     });
   }
 
-  async handleUpdateItem(id: number, update: Object) {
-    const { updateItem } = this.props.api;
-    const { items } = this.state;
-    const index = items.findIndex(item => item.id == id);
-
-    if (index === -1) {
-      return;
+  handleAddItem() {
+    const { newItemValue } = this.state;
+    if (newItemValue.trim()) {
+      this.setState({ loading: true });
+      this.sendItem({ checked: false, value: newItemValue.trim() });
     }
+  }
 
-    this.setState({ loading: true }); // ??? смешивание
-
-    await updateItem(index, update);
-
+  async updateItem(id: number, update: $Shape<ItemType>): Promise<void> {
+    const { items } = this.state;
+    await this.props.api.updateItem(id, update);
     this.setState({
       items: [
-        ...items.slice(0, index),
-        { ...items[index], ...update },
-        ...items.slice(index + 1)
+        ...items.slice(0, id),
+        { ...items[id], ...update },
+        ...items.slice(id + 1)
       ],
       loading: false
     });
   }
 
-  async handleRemoveItem(id: number) {
-    const { removeItem } = this.props.api;
+  handleUpdateItem(id: number, update: $Shape<ItemType>) {
+    const index = this.state.items.findIndex(item => item.id == id);
+    if (index === -1) return;
+    this.setState({ loading: true });
+    this.updateItem(index, update);
+  }
+
+  async removeItem(id: number): Promise<void> {
     const { items } = this.state;
-    const index = items.findIndex(i => i.id === id);
-
-    if (index === -1) {
-      return;
-    }
-
-    this.setState({ loading: true }); // ??? смешивание
-
-    await removeItem(index);
-
+    await this.props.api.removeItem(id);
     this.setState({
-      items: [...items.slice(0, index), ...items.slice(index + 1)],
+      items: [...items.slice(0, id), ...items.slice(id + 1)],
       loading: false
     });
+  }
+
+  handleRemoveItem(id: number) {
+    const index = this.state.items.findIndex(i => i.id === id);
+    if (index === -1) return;
+    this.setState({ loading: true });
+    this.removeItem(index);
   }
 
   handleFilterItems() {
@@ -130,36 +108,35 @@ export default class Todo extends React.Component {
     return items.filter(filters[filter]);
   }
 
-  async handleCheckAll(checked: boolean) {
-    const { checkAll } = this.props.api;
-
-    this.setState({ loading: true }); // ??? смешивание
-
-    await checkAll(checked);
-
+  async checkAll(checked: boolean): Promise<void> {
+    await this.props.api.checkAll(checked);
     const items = this.state.items.map(i => ({
       ...i,
       checked: checked
     }));
-
     this.setState({
       items,
       loading: false
     });
   }
 
-  async handleRemoveCompleted() {
-    const { removeCompleted } = this.props.api;
-    const { items } = this.state;
+  handleCheckAll(checked: boolean) {
+    this.setState({ loading: true });
+    this.checkAll(checked);
+  }
 
-    this.setState({ loading: true }); // ??? смешивание
-
-    await removeCompleted();
-
+  async removeCompleted(): Promise<void> {
+    await this.props.api.removeCompleted();
+    const items = this.state.items.filter(item => !item.checked);
     this.setState({
-      items: items.filter(item => !item.checked),
+      items,
       loading: false
     });
+  }
+
+  handleRemoveCompleted() {
+    this.setState({ loading: true });
+    this.removeCompleted();
   }
 
   renderHeader() {
@@ -222,18 +199,13 @@ export default class Todo extends React.Component {
     );
   }
 
-  renderEditingModal(props: Object) {
+  renderEditingModal(props) {
     const { items } = this.state;
     const { match, history } = props;
     const id = Number(match.params.id);
     const index = items.findIndex(i => i.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
+    if (index === -1) return false;
     const value = items[index].value;
-
     return (
       <EditingModal
         value={value}
