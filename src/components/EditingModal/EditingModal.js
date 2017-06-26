@@ -1,12 +1,31 @@
+// @flow
+
 import React from "react";
-import PropTypes from "prop-types";
 
 import Modal from "retail-ui/components/Modal";
 import Input from "retail-ui/components/Input";
 import Button from "retail-ui/components/Button";
 
+type Props = {
+  value: string,
+  onClose: () => void,
+  onSubmit: (value: string) => void
+};
+
+type State = {
+  value: string
+};
+
 export default class EditingModal extends React.Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+  static defaultProps = {
+    value: "",
+    onClose: () => {},
+    onSubmit: (value: string) => {}
+  };
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       value: props.value
@@ -24,9 +43,16 @@ export default class EditingModal extends React.Component {
             width="100%"
             autoFocus={true}
             value={value}
-            onChange={event => this.setState({ value: event.target.value })}
-            onKeyDown={event =>
-              event.key === "Enter" ? onSubmit(value) : false}
+            onChange={(event: Event) => {
+              if (event.target instanceof HTMLInputElement) {
+                this.setState({ value: event.target.value });
+              }
+            }}
+            onKeyDown={(event: Event) => {
+              if (event.target instanceof HTMLInputElement) {
+                event.key === "Enter" ? onSubmit(value) : false;
+              }
+            }}
           />
         </Modal.Body>
         <Modal.Footer panel>
@@ -38,14 +64,3 @@ export default class EditingModal extends React.Component {
     );
   }
 }
-
-EditingModal.propTypes = {
-  value: PropTypes.string.isRequired,
-  onClose: PropTypes.func,
-  onSubmit: PropTypes.func
-};
-
-EditingModal.defaultProps = {
-  onClose: () => {},
-  onSubmit: () => {}
-};

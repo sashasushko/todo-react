@@ -1,0 +1,22 @@
+[ignore]
+.*/fbjs/.*
+.*/retail-ui/lib/.*
+.*/retail-ui/docs/.*
+.*/retail-ui/testing/.*
+.*/retail-ui/components/.*
+.*/react-ui-validations/src/.*
+.*/stylelint/.*
+.*/retail-ui/docs/stories/.*
+/dist
+/src/stories
+
+[include]
+
+[libs]
+interfaces/
+
+[options]
+module.name_mapper='^.*\.less+$' -> '<PROJECT_ROOT>/flow/StylesFlowStub'
+
+esproposal.class_instance_fields=enable
+unsafe.enable_getters_and_setters=true

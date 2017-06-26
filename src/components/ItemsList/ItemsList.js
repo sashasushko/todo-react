@@ -1,38 +1,35 @@
+// @flow
 import React from "react";
-import PropTypes from "prop-types";
-
 import Gapped from "retail-ui/components/Gapped";
 import Item from "./../Item/Item";
+import type { ItemType } from "../../domain/Item";
 
-export default function ItemsList(props) {
+type Props = {
+  items: ItemType[],
+  onChange: (id: number, update: $Shape<ItemType>) => void,
+  onRemove: (id: number) => void
+};
+
+export default function ItemsList(props: Props): React.Element<*> {
   const { items, onChange, onRemove } = props;
+
   return (
     <Gapped gap={20} vertical={true}>
-      {items.length === 0 && <i>Список пуст</i>}
-      {items.map(({ id, checked, value }) => {
-        return (
-          <Item
-            key={id}
-            id={id}
-            value={value}
-            checked={checked}
-            onChange={event => onChange(id, { checked: event.target.checked })}
-            onRemove={() => onRemove(id)}
-          />
-        );
-      })}
+      {items == null || (items.length === 0 && <i>Список пуст</i>)}
+      {items != null &&
+        items.map(item => {
+          const { id, checked, value } = item;
+          return (
+            <Item
+              key={id}
+              id={id}
+              value={value}
+              checked={checked}
+              onChange={checked => onChange(id, { checked })}
+              onRemove={() => onRemove(id)}
+            />
+          );
+        })}
     </Gapped>
   );
 }
-
-ItemsList.propTypes = {
-  items: PropTypes.array,
-  onChange: PropTypes.func,
-  onRemove: PropTypes.func
-};
-
-ItemsList.defaultProps = {
-  items: [],
-  onChange: () => {},
-  onRemove: () => {}
-};

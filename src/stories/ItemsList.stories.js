@@ -1,3 +1,4 @@
+// @flow
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -22,6 +23,7 @@ storiesOf("Items List", module)
   .addDecorator(StoryRouter())
   .add("default", () =>
     <ItemsList
+      items={[]}
       onChange={action("onChange")}
       onEditRequest={action("onEditRequest")}
       onRemove={action("onRemove")}
