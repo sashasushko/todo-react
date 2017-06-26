@@ -1,7 +1,7 @@
 // @flow
 import type { ItemType } from "./../domain/Item";
 
-function sleep(response: ItemType[] | number | boolean): Promise<any> {
+function sleep<T>(response: T): Promise<T> {
   let time = Math.floor(Math.random() * (2.5 - 0.5) + 0.5) * 1000;
   return new Promise(resolve => setTimeout(() => resolve(response), time));
 }
@@ -31,9 +31,17 @@ export default class FakeItemsApi implements IItemsApi {
   }
 
   async addItem(data: $Shape<ItemType>): Promise<number> {
+    // Временная ошибка
+    if (
+      Math.round(Math.random()) ||
+      data.value.toLowerCase().indexOf("error") !== -1
+    ) {
+      throw new Error("Error!");
+    }
+
     const items = this.loadData();
-    const id: number = items[items.length - 1]["id"] + 1;
-    const updatedItems: ItemType[] = [...items, { ...data, id }];
+    const id = (Math.max(...items.map(x => x.id)) || 0) + 1;
+    const updatedItems = [...items, { ...data, id }];
     this.writeData(updatedItems);
     return await sleep(id);
   }

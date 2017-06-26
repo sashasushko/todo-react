@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 import styles from "./Todo.less";
 import Loader from "retail-ui/components/Loader";
 import Gapped from "retail-ui/components/Gapped";
+import Modal from "retail-ui/components/Modal";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
 import Button from "retail-ui/components/Button";
@@ -22,7 +23,8 @@ type State = {|
   items: ItemType[],
   filter: FilterType,
   newItemValue: string,
-  loading: boolean
+  loading: boolean,
+  error: boolean
 |};
 
 export default class Todo extends React.Component {
@@ -31,7 +33,8 @@ export default class Todo extends React.Component {
     items: [],
     filter: "all",
     newItemValue: "",
-    loading: true
+    loading: true,
+    error: false
   };
 
   async getData(): Promise<void> {
@@ -44,13 +47,20 @@ export default class Todo extends React.Component {
   }
 
   async sendItem(data: $Shape<ItemType>): Promise<void> {
-    const { items } = this.state;
-    const id = await this.props.api.addItem(data);
-    this.setState({
-      items: [...items, { ...data, id }],
-      loading: false,
-      newItemValue: ""
-    });
+    try {
+      const { items } = this.state;
+      const id = await this.props.api.addItem(data);
+      this.setState({
+        items: [...items, { ...data, id }],
+        loading: false,
+        newItemValue: ""
+      });
+    } catch (error) {
+      this.setState({
+        loading: false,
+        error: true
+      });
+    }
   }
 
   handleAddItem() {
@@ -222,8 +232,23 @@ export default class Todo extends React.Component {
     );
   }
 
+  renderError() {
+    return (
+      <Modal onClose={() => this.setState({ error: false })}>
+        <Modal.Body>
+          <p>Что-то не вышло. Попробуйте ещё раз</p>
+        </Modal.Body>
+        <Modal.Footer panel={true}>
+          <Button use="primary" onClick={() => this.setState({ error: false })}>
+            Ладно
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   render() {
-    const { loading } = this.state;
+    const { error, loading } = this.state;
 
     return (
       <div className={styles.container}>
@@ -243,6 +268,7 @@ export default class Todo extends React.Component {
               path="/edit/:id"
               render={props => this.renderEditingModal(props)}
             />
+            {error && this.renderError()}
           </div>
         </Loader>
       </div>
