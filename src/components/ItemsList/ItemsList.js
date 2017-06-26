@@ -4,8 +4,6 @@ import Gapped from "retail-ui/components/Gapped";
 import Item from "./../Item/Item";
 import type { ItemType } from "../../domain/Item";
 
-// Как реализовать isRequared???
-
 type Props = {
   items: ItemType[],
   onChange: (id: number, update: $Shape<ItemType>) => void,

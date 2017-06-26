@@ -175,7 +175,6 @@ export default class Todo extends React.Component {
     );
   }
 
-  // ----------------------- ???
   renderEditingModal(props: Object) {
     const { items } = this.state;
     const { match, history } = props;

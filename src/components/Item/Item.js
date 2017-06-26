@@ -12,7 +12,6 @@ import Button from "retail-ui/components/Button";
 import Link from "retail-ui/components/Link";
 
 type DefaultProps = {
-  removable: boolean,
   checked: boolean,
   onChange: () => void,
   onRemove: () => void
@@ -21,35 +20,24 @@ type DefaultProps = {
 type Props = {|
   id: number,
   value: string,
-  removable: boolean,
   checked: boolean,
   onChange: (checked: boolean) => void,
   onRemove: () => void
 |};
 
 type State = {
-  removable: boolean
+  removeConfirm: boolean
 };
 
 export default class Item extends React.Component {
   props: Props;
-  state: State = { removable: false };
-
-  static defaultProps = {
-    removable: false
-  };
-
-  // ???
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({ removable: nextProps.removable });
-  // }
+  state: State = { removeConfirm: false };
 
   renderRemoveModal() {
     const { onRemove } = this.props;
 
     return (
-      // ???
-      <Modal onClose={() => this.setState({ removable: false })}>
+      <Modal onClose={() => this.setState({ removeConfirm: false })}>
         <Modal.Body>
           <p>Удаленный пункт не&nbsp;восстановить. Вы&nbsp;уверены?</p>
         </Modal.Body>
@@ -59,14 +47,14 @@ export default class Item extends React.Component {
               use="danger"
               onClick={() => {
                 onRemove();
-                this.setState({ removable: false });
+                this.setState({ removeConfirm: false });
               }}
             >
               Да, удалите
             </Button>
             <Button
               use="link"
-              onClick={() => this.setState({ removable: false })}
+              onClick={() => this.setState({ removeConfirm: false })}
             >
               Нет, не удаляйте
             </Button>
@@ -78,7 +66,7 @@ export default class Item extends React.Component {
 
   render() {
     const { id, checked, value, onChange } = this.props;
-    const { removable } = this.state;
+    const { removeConfirm } = this.state;
 
     return (
       <Gapped gap={20}>
@@ -98,11 +86,11 @@ export default class Item extends React.Component {
         <Link
           use="danger"
           icon="remove"
-          onClick={() => this.setState({ removable: true })}
+          onClick={() => this.setState({ removeConfirm: true })}
         >
           Удалить
         </Link>
-        {removable && this.renderRemoveModal()}
+        {removeConfirm && this.renderRemoveModal()}
       </Gapped>
     );
   }
