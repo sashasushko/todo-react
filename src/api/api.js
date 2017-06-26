@@ -32,10 +32,7 @@ export default class FakeItemsApi implements IItemsApi {
 
   async addItem(data: $Shape<ItemType>): Promise<number> {
     // Временная ошибка
-    if (
-      Math.round(Math.random()) ||
-      data.value.toLowerCase().indexOf("error") !== -1
-    ) {
+    if (data.value.toLowerCase().indexOf("error") !== -1) {
       throw new Error("Error!");
     }
 

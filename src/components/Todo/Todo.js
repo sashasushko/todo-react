@@ -46,7 +46,7 @@ export default class Todo extends React.Component {
     this.getData();
   }
 
-  async sendItem(data: $Shape<ItemType>): Promise<void> {
+  async addItem(data: $Shape<ItemType>): Promise<void> {
     try {
       const { items } = this.state;
       const id = await this.props.api.addItem(data);
@@ -67,7 +67,7 @@ export default class Todo extends React.Component {
     const { newItemValue } = this.state;
     if (newItemValue.trim()) {
       this.setState({ loading: true });
-      this.sendItem({ checked: false, value: newItemValue.trim() });
+      this.addItem({ checked: false, value: newItemValue.trim() });
     }
   }
 
@@ -157,6 +157,7 @@ export default class Todo extends React.Component {
         <div className={styles.addingInput}>
           <Input
             width="100%"
+            className="js_input"
             value={newItemValue}
             placeholder="Например: Сходить, куда глаза глядят"
             onChange={(event: Event) => {
@@ -232,7 +233,7 @@ export default class Todo extends React.Component {
     );
   }
 
-  renderError() {
+  renderErrorModal() {
     return (
       <Modal onClose={() => this.setState({ error: false })}>
         <Modal.Body>
@@ -268,7 +269,7 @@ export default class Todo extends React.Component {
               path="/edit/:id"
               render={props => this.renderEditingModal(props)}
             />
-            {error && this.renderError()}
+            {error && this.renderErrorModal()}
           </div>
         </Loader>
       </div>
