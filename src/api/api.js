@@ -2,7 +2,7 @@
 import type { ItemType } from "./../domain/Item";
 
 function sleep(response: ItemType[] | number | boolean): Promise<any> {
-  let time = Math.floor(Math.random() * (2 - 1) + 1) * 1000;
+  let time = Math.floor(Math.random() * (2.5 - 0.5) + 0.5) * 1000;
   return new Promise(resolve => setTimeout(() => resolve(response), time));
 }
 
