@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { AppContainer } from "react-hot-loader";
+import FakeItemsApi from "./api/api";
 
 import "./style.less";
 
@@ -11,7 +12,7 @@ const render = Component => {
   ReactDOM.render(
     <AppContainer>
       <BrowserRouter>
-        <Component />
+        <Component api={new FakeItemsApi()} />
       </BrowserRouter>
     </AppContainer>,
     document.getElementById("root")

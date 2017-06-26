@@ -5,6 +5,7 @@ import { Route } from "react-router-dom";
 
 import styles from "./Todo.less";
 
+import Loader from "retail-ui/components/Loader";
 import Gapped from "retail-ui/components/Gapped";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
@@ -13,18 +14,20 @@ import Button from "retail-ui/components/Button";
 import EditingModal from "./../EditingModal/EditingModal";
 import ItemsList from "./../ItemsList/ItemsList";
 import Filter from "./../Filter/Filter";
-import type { ItemType } from "../../domain/Item";
+import type { ItemType } from "./../../domain/Item";
+import type { IItemsApi } from "./../../api/api";
 
-type Props = {||};
+type Props = {|
+  api: IItemsApi
+|};
 
 type FilterType = "all" | "active" | "completed";
 
 type State = {
-  increment: number,
   items: ItemType[],
   filter: FilterType,
-  value: string,
-  editingValue: string
+  newItemValue: string,
+  loading: boolean
 };
 
 export default class Todo extends React.Component {
@@ -34,30 +37,48 @@ export default class Todo extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      increment: 0,
       items: [],
       filter: "all",
-      value: "",
-      editingValue: ""
+      newItemValue: "",
+      loading: true
     };
   }
 
-  handleAddItem() {
-    const { value, increment, items } = this.state;
-    const item = {
-      id: increment,
+  async getData(): Promise<void> {
+    const { getItems } = this.props.api;
+    const items = await getItems();
+
+    this.setState({ items, loading: false });
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  async handleAddItem(): Promise<void> {
+    this.setState({ loading: true }); // ??? смешивание
+
+    const { newItemValue, items } = this.state;
+    const { addItem } = this.props.api;
+    const newItemId: number = await addItem({
       checked: false,
-      value
+      value: newItemValue
+    });
+    const item: ItemType = {
+      id: newItemId,
+      checked: false,
+      value: newItemValue
     };
 
     this.setState({
       items: [...items, item],
-      increment: increment + 1,
-      value: ""
+      newItemValue: "",
+      loading: false
     });
   }
 
-  handleUpdateItem(id: number, update: Object) {
+  async handleUpdateItem(id: number, update: Object) {
+    const { updateItem } = this.props.api;
     const { items } = this.state;
     const index = items.findIndex(item => item.id == id);
 
@@ -65,16 +86,22 @@ export default class Todo extends React.Component {
       return;
     }
 
+    this.setState({ loading: true }); // ??? смешивание
+
+    await updateItem(index, update);
+
     this.setState({
       items: [
         ...items.slice(0, index),
         { ...items[index], ...update },
         ...items.slice(index + 1)
-      ]
+      ],
+      loading: false
     });
   }
 
-  handleRemoveItem(id: number) {
+  async handleRemoveItem(id: number) {
+    const { removeItem } = this.props.api;
     const { items } = this.state;
     const index = items.findIndex(i => i.id === id);
 
@@ -82,8 +109,13 @@ export default class Todo extends React.Component {
       return;
     }
 
+    this.setState({ loading: true }); // ??? смешивание
+
+    await removeItem(index);
+
     this.setState({
-      items: [...items.slice(0, index), ...items.slice(index + 1)]
+      items: [...items.slice(0, index), ...items.slice(index + 1)],
+      loading: false
     });
   }
 
@@ -98,36 +130,51 @@ export default class Todo extends React.Component {
     return items.filter(filters[filter]);
   }
 
-  handleCheckAll(checked: boolean) {
+  async handleCheckAll(checked: boolean) {
+    const { checkAll } = this.props.api;
+
+    this.setState({ loading: true }); // ??? смешивание
+
+    await checkAll(checked);
+
     const items = this.state.items.map(i => ({
       ...i,
       checked: checked
     }));
 
-    this.setState({ items });
+    this.setState({
+      items,
+      loading: false
+    });
   }
 
-  handleRemoveCompleted() {
+  async handleRemoveCompleted() {
+    const { removeCompleted } = this.props.api;
     const { items } = this.state;
 
+    this.setState({ loading: true }); // ??? смешивание
+
+    await removeCompleted();
+
     this.setState({
-      items: items.filter(item => !item.checked)
+      items: items.filter(item => !item.checked),
+      loading: false
     });
   }
 
   renderHeader() {
-    const { value, items } = this.state;
+    const { newItemValue, items } = this.state;
 
     return (
       <div className={styles.header}>
         <div className={styles.addingInput}>
           <Input
             width="100%"
-            value={value}
+            value={newItemValue}
             placeholder="Например: Сходить, куда глаза глядят"
             onChange={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
-                this.setState({ value: event.target.value });
+                this.setState({ newItemValue: event.target.value });
               }
             }}
             onKeyDown={(event: Event) => {
@@ -204,22 +251,28 @@ export default class Todo extends React.Component {
   }
 
   render() {
+    const { loading } = this.state;
+
     return (
       <div className={styles.container}>
-        <h1 className={styles.title}>Список дел</h1>
-        {this.renderHeader()}
-        <div className={styles.list}>
-          <ItemsList
-            items={this.handleFilterItems()}
-            onChange={(id, update) => this.handleUpdateItem(id, update)}
-            onRemove={id => this.handleRemoveItem(id)}
-          />
-        </div>
-        {this.renderFooter()}
-        <Route
-          path="/edit/:id"
-          render={props => this.renderEditingModal(props)}
-        />
+        <Loader active={loading} container="Пожалуйста, подождите...">
+          <div className={styles.wrap}>
+            <h1 className={styles.title}>Список дел</h1>
+            {this.renderHeader()}
+            <div className={styles.list}>
+              <ItemsList
+                items={this.handleFilterItems()}
+                onChange={(id, update) => this.handleUpdateItem(id, update)}
+                onRemove={id => this.handleRemoveItem(id)}
+              />
+            </div>
+            {this.renderFooter()}
+            <Route
+              path="/edit/:id"
+              render={props => this.renderEditingModal(props)}
+            />
+          </div>
+        </Loader>
       </div>
     );
   }
