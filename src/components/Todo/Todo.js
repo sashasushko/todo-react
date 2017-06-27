@@ -1,90 +1,110 @@
 // @flow
-
 import React from "react";
 import { Route } from "react-router-dom";
-
 import styles from "./Todo.less";
-
+import Loader from "retail-ui/components/Loader";
 import Gapped from "retail-ui/components/Gapped";
+import Modal from "retail-ui/components/Modal";
 import Checkbox from "retail-ui/components/Checkbox";
 import Input from "retail-ui/components/Input";
 import Button from "retail-ui/components/Button";
-
 import EditingModal from "./../EditingModal/EditingModal";
 import ItemsList from "./../ItemsList/ItemsList";
 import Filter from "./../Filter/Filter";
-import type { ItemType } from "../../domain/Item";
+import type { ItemType } from "./../../domain/Item";
+import type { FilterType } from "./../../domain/Filter";
+import type { IItemsApi } from "./../../api/api";
 
-type Props = {||};
+type Props = {|
+  api: IItemsApi
+|};
 
-type FilterType = "all" | "active" | "completed";
-
-type State = {
-  increment: number,
+type State = {|
   items: ItemType[],
   filter: FilterType,
-  value: string,
-  editingValue: string
-};
+  newItemValue: string,
+  loading: boolean,
+  error: boolean
+|};
 
 export default class Todo extends React.Component {
   props: Props;
-  state: State;
+  state: State = {
+    items: [],
+    filter: "all",
+    newItemValue: "",
+    loading: true,
+    error: false
+  };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      increment: 0,
-      items: [],
-      filter: "all",
-      value: "",
-      editingValue: ""
-    };
+  async getData(): Promise<void> {
+    const items = await this.props.api.getItems();
+    this.setState({ items, loading: false });
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  async addItem(data: $Shape<ItemType>): Promise<void> {
+    try {
+      const { items } = this.state;
+      const id = await this.props.api.addItem(data);
+      this.setState({
+        items: [...items, { ...data, id }],
+        loading: false,
+        newItemValue: ""
+      });
+    } catch (error) {
+      this.setState({
+        loading: false,
+        error: true
+      });
+    }
   }
 
   handleAddItem() {
-    const { value, increment, items } = this.state;
-    const item = {
-      id: increment,
-      checked: false,
-      value
-    };
+    const { newItemValue } = this.state;
+    if (newItemValue.trim()) {
+      this.setState({ loading: true });
+      this.addItem({ checked: false, value: newItemValue.trim() });
+    }
+  }
 
+  async updateItem(id: number, update: $Shape<ItemType>): Promise<void> {
+    const { items } = this.state;
+    await this.props.api.updateItem(id, update);
     this.setState({
-      items: [...items, item],
-      increment: increment + 1,
-      value: ""
+      items: [
+        ...items.slice(0, id),
+        { ...items[id], ...update },
+        ...items.slice(id + 1)
+      ],
+      loading: false
     });
   }
 
-  handleUpdateItem(id: number, update: Object) {
+  handleUpdateItem(id: number, update: $Shape<ItemType>) {
+    const index = this.state.items.findIndex(item => item.id == id);
+    if (index === -1) return;
+    this.setState({ loading: true });
+    this.updateItem(index, update);
+  }
+
+  async removeItem(id: number): Promise<void> {
     const { items } = this.state;
-    const index = items.findIndex(item => item.id == id);
-
-    if (index === -1) {
-      return;
-    }
-
+    await this.props.api.removeItem(id);
     this.setState({
-      items: [
-        ...items.slice(0, index),
-        { ...items[index], ...update },
-        ...items.slice(index + 1)
-      ]
+      items: [...items.slice(0, id), ...items.slice(id + 1)],
+      loading: false
     });
   }
 
   handleRemoveItem(id: number) {
-    const { items } = this.state;
-    const index = items.findIndex(i => i.id === id);
-
-    if (index === -1) {
-      return;
-    }
-
-    this.setState({
-      items: [...items.slice(0, index), ...items.slice(index + 1)]
-    });
+    const index = this.state.items.findIndex(i => i.id === id);
+    if (index === -1) return;
+    this.setState({ loading: true });
+    this.removeItem(index);
   }
 
   handleFilterItems() {
@@ -98,36 +118,51 @@ export default class Todo extends React.Component {
     return items.filter(filters[filter]);
   }
 
-  handleCheckAll(checked: boolean) {
+  async checkAll(checked: boolean): Promise<void> {
+    await this.props.api.checkAll(checked);
     const items = this.state.items.map(i => ({
       ...i,
       checked: checked
     }));
-
-    this.setState({ items });
-  }
-
-  handleRemoveCompleted() {
-    const { items } = this.state;
-
     this.setState({
-      items: items.filter(item => !item.checked)
+      items,
+      loading: false
     });
   }
 
+  handleCheckAll(checked: boolean) {
+    this.setState({ loading: true });
+    this.checkAll(checked);
+  }
+
+  async removeCompleted(): Promise<void> {
+    await this.props.api.removeCompleted();
+    const items = this.state.items.filter(item => !item.checked);
+    this.setState({
+      items,
+      loading: false
+    });
+  }
+
+  handleRemoveCompleted() {
+    this.setState({ loading: true });
+    this.removeCompleted();
+  }
+
   renderHeader() {
-    const { value, items } = this.state;
+    const { newItemValue, items } = this.state;
 
     return (
       <div className={styles.header}>
         <div className={styles.addingInput}>
           <Input
             width="100%"
-            value={value}
+            className="js_input"
+            value={newItemValue}
             placeholder="Например: Сходить, куда глаза глядят"
             onChange={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
-                this.setState({ value: event.target.value });
+                this.setState({ newItemValue: event.target.value });
               }
             }}
             onKeyDown={(event: Event) => {
@@ -175,18 +210,13 @@ export default class Todo extends React.Component {
     );
   }
 
-  renderEditingModal(props: Object) {
+  renderEditingModal(props) {
     const { items } = this.state;
     const { match, history } = props;
     const id = Number(match.params.id);
     const index = items.findIndex(i => i.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
+    if (index === -1) return false;
     const value = items[index].value;
-
     return (
       <EditingModal
         value={value}
@@ -203,23 +233,45 @@ export default class Todo extends React.Component {
     );
   }
 
+  renderErrorModal() {
+    return (
+      <Modal onClose={() => this.setState({ error: false })}>
+        <Modal.Body>
+          <p>Что-то не вышло. Попробуйте ещё раз</p>
+        </Modal.Body>
+        <Modal.Footer panel={true}>
+          <Button use="primary" onClick={() => this.setState({ error: false })}>
+            Ладно
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   render() {
+    const { error, loading } = this.state;
+
     return (
       <div className={styles.container}>
-        <h1 className={styles.title}>Список дел</h1>
-        {this.renderHeader()}
-        <div className={styles.list}>
-          <ItemsList
-            items={this.handleFilterItems()}
-            onChange={(id, update) => this.handleUpdateItem(id, update)}
-            onRemove={id => this.handleRemoveItem(id)}
-          />
-        </div>
-        {this.renderFooter()}
-        <Route
-          path="/edit/:id"
-          render={props => this.renderEditingModal(props)}
-        />
+        <Loader active={loading} container="Пожалуйста, подождите...">
+          <div className={styles.wrap}>
+            <h1 className={styles.title}>Список дел</h1>
+            {this.renderHeader()}
+            <div className={styles.list}>
+              <ItemsList
+                items={this.handleFilterItems()}
+                onChange={(id, update) => this.handleUpdateItem(id, update)}
+                onRemove={id => this.handleRemoveItem(id)}
+              />
+            </div>
+            {this.renderFooter()}
+            <Route
+              path="/edit/:id"
+              render={props => this.renderEditingModal(props)}
+            />
+            {error && this.renderErrorModal()}
+          </div>
+        </Loader>
       </div>
     );
   }

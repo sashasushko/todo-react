@@ -5,10 +5,11 @@ import PropTypes from "prop-types";
 
 import Group from "retail-ui/components/Group";
 import Button from "retail-ui/components/Button";
+import type { FilterType } from "./../../domain/Filter";
 
 type Props = {
   filter: string,
-  onChange: (filter: "all" | "active" | "completed") => void
+  onChange: (filter: FilterType) => void
 };
 
 export default function Filter(props: Props) {
