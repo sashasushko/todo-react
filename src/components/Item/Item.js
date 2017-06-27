@@ -44,6 +44,7 @@ export default class Item extends React.Component {
         <Modal.Footer panel>
           <Gapped gap={30}>
             <Button
+              autoFocus={true}
               use="danger"
               onClick={() => {
                 onRemove();
