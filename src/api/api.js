@@ -31,7 +31,7 @@ export default class FakeItemsApi implements IItemsApi {
   }
 
   async addItem(data: $Shape<ItemType>): Promise<number> {
-    // Временная ошибка
+    // Пример ошибки
     if (data.value.toLowerCase().indexOf("error") !== -1) {
       throw new Error("Error!");
     }
