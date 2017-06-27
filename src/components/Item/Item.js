@@ -70,7 +70,7 @@ export default class Item extends React.Component {
 
     return (
       <Gapped gap={20}>
-        <div>
+        <Gapped gap={10}>
           <Checkbox
             checked={checked}
             onChange={(event: Event) => {
@@ -82,7 +82,7 @@ export default class Item extends React.Component {
           <RouterLink className={styles.link} to={"/edit/" + id}>
             {value}
           </RouterLink>
-        </div>
+        </Gapped>
         <Link
           use="danger"
           icon="remove"

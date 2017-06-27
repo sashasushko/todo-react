@@ -37,7 +37,7 @@
     "react-dom": "^15.5.4",
     "react-hot-loader": "next",
     "react-router-dom": "^4.1.1",
-    "retail-ui": "^0.7.6",
+    "retail-ui": "^0.8.0",
     "storybook-router": "^0.2.7",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
