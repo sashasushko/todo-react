@@ -4,16 +4,14 @@
   "description": "Test React App",
   "main": "index.html",
   "scripts": {
-    "dev": "webpack-dev-server --hot --history-api-fallback --content-base dist/ --port 9000",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "dev": "webpack-dev-server --hot --history-api-fallback --content-base dist/ --port 8000",
+    "storybook": "start-storybook -p 8001 -c .storybook"
   },
   "repository": {
     "type": "git",
     "url": "git@git.skbkontur.ru:sushko/todo.git"
   },
-  "keywords": [
-    "todo"
-  ],
+  "keywords": ["todo"],
   "author": "Alexander Sushko",
   "license": "ISC",
   "dependencies": {},
