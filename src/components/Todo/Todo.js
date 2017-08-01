@@ -196,7 +196,9 @@ export default class Todo extends React.Component {
       <div>
         {items.length != 0 &&
           <Gapped gap={30}>
-            <div>Осталось: {items.filter(i => !i.checked).length}</div>
+            <div>
+              Осталось: {items.filter(i => !i.checked).length}
+            </div>
             <Filter
               filter={filter}
               onChange={filter => this.setState({ filter })}
