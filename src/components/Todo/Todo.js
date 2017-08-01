@@ -165,7 +165,7 @@ export default class Todo extends React.Component {
                 this.setState({ newItemValue: event.target.value });
               }
             }}
-            onKeyDown={(event: Event) => {
+            onKeyPress={(event: Event) => {
               if (event.target instanceof HTMLInputElement) {
                 event.key === "Enter" ? this.handleAddItem() : false;
               }
@@ -240,7 +240,11 @@ export default class Todo extends React.Component {
           <p>Что-то не вышло. Попробуйте ещё раз</p>
         </Modal.Body>
         <Modal.Footer panel={true}>
-          <Button use="primary" onClick={() => this.setState({ error: false })}>
+          <Button
+            autoFocus={true}
+            use="primary"
+            onClick={() => this.setState({ error: false })}
+          >
             Ладно
           </Button>
         </Modal.Footer>
