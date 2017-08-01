@@ -37,7 +37,7 @@ export default class FakeItemsApi implements IItemsApi {
     }
 
     const items = this.loadData();
-    const id = (Math.max(...items.map(x => x.id)) || 0) + 1;
+    const id = items.reduce((a, { id }) => (a > id ? a : id), 0) + 1;
     const updatedItems = [...items, { ...data, id }];
     this.writeData(updatedItems);
     return await sleep(id);
