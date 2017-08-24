@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --hot --history-api-fallback --content-base dist/ --port 8000",
     "storybook": "start-storybook -p 8001 -c .storybook",
-    "build": "set NODE_ENV=production && webpack -p"
+    "build": "cross-env NODE_ENV=production webpack -p",
+    "serve": "http-server ./dist -g -c-1"
   },
   "repository": {
     "type": "git",
@@ -15,7 +16,10 @@
   "keywords": ["todo"],
   "author": "Alexander Sushko",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "preact": "^8.2.1",
+    "preact-compat": "^3.17.0"
+  },
   "devDependencies": {
     "@storybook/react": "^3.0.1",
     "babel-core": "^6.24.1",
@@ -27,10 +31,12 @@
     "babel-preset-stage-0": "^6.24.1",
     "classnames": "^2.2.5",
     "classnames-loader": "^2.0.0",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.28.0",
+    "http-server": "^0.10.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.4",
     "react": "^15.5.4",
